@@ -13,4 +13,3 @@ file(GLOB SRCS_COMMON src/*.cpp)
 file(GLOB HDRS src/*.h)
 
 add_executable(isasim IsaSim.cpp ${SRCS_COMMON} ${HDRS})
-
