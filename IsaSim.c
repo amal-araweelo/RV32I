@@ -19,6 +19,8 @@
 #define NO_ERR 0
 
 //Function Prototypes
+
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
 
 int main(void) {
@@ -46,53 +48,9 @@ int main(void) {
         switch (opcode) {
             // I-type instructions
             case 0x13:
-                switch (funct3){
-                    // addi
-                    case 0x0:
-                        reg[rd] = reg[rs1] + imm;
-                    break;
-                    
-                    // slli
-                    case 0x1:
-                        reg[rd] = reg[rs1] << imm;
-                    break;
-
-                    // slti
-                    case 0x3:
-                        if (reg[rs1] < imm ) reg[rd] = 1 break;
-                        reg[rd] = 0;
-                    break;
-
-                    // xori
-                    case 0x4:
-                        reg[rd] = reg[rs1] ^ imm;
-                    break;
-
-                    // srli and srai
-                    case 0x5:
-                        switch (funt7):
-                            // srli
-                            case 0x0:
-                                reg[rd] = reg[rs1] >> imm;
-                            break;
-                            // srai
-                            case 0x20:
-                                if (reg[rs1] > 0) reg[rd] = reg[rs1] >> imm break;
-                                reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF;
-                            break;       
-                    break;
-                    
-                    // ori
-                    case 0x6:
-                        reg[rd] = reg[rsl] | imm;
-                    break;
-
-                    // andi
-                    case 0x7:
-                        reg[rd] = reg[rs1] & imm;
-                    break;
-                }
-case 0x33:
+                ItypeSwitch(funct3, funct7, rd, rs1, rs2);
+                break;
+            case 0x33:
                 RtypeSwitch(funct3, funct7,rd, rs1, rs2);
                 break;
             default:
@@ -131,54 +89,103 @@ int add(int isImm){
 */
 
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
-    switch (funct3)
-    {
-    case 0x00:
-        if(funct7 != 0){
-            //sub 
-        }
-        else{
-            //add HAS IMM
-        }
+switch (funct3)
+{
+case 0x00:
+    if(funct7 != 0){
+        //sub 
+    }
+    else{
+        //add HAS IMM
+    }
+    break;
+
+case 0x01:
+    //sll HAS IMM
+    break;
+
+case 0x02:
+    //slt HAS IMM
+    break;
+
+case 0x03:
+    //sltu HAS IMM
+    break;
+
+case 0x04:
+    //xor HAS IMM
+    break;
+
+case 0x05:
+    if(funct7 != 0){
+        //sra HAS IMM
+    }
+    else{
+        //srl HAS IMM
+    }
+    break;
+
+case 0x06:
+    //or HAS IMM
+    break;
+
+case 0x07:
+    //and HAS IMM
+    break;
+
+
+default:
+    printf("in RtypeSwitch funct3 error: case not defined");
+    printf("funct3 value (unsigned int): %u", funct3);
+    break;
+}
+}
+
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
+    switch (funct3){
+        // addi
+        case 0x0:
+            reg[rd] = reg[rs1] + imm;
         break;
-    
-    case 0x01:
-        //sll HAS IMM
-        break;
-    
-    case 0x02:
-        //slt HAS IMM
+        
+        // slli
+        case 0x1:
+            reg[rd] = reg[rs1] << imm;
         break;
 
-    case 0x03:
-        //sltu HAS IMM
+        // slti
+        case 0x3:
+            if (reg[rs1] < imm) reg[rd] = 1 break;
+            reg[rd] = 0;
         break;
 
-    case 0x04:
-        //xor HAS IMM
+        // xori
+        case 0x4:
+            reg[rd] = reg[rs1] ^ imm;
         break;
 
-    case 0x05:
-        if(funct7 != 0){
-            //sra HAS IMM
-        }
-        else{
-            //srl HAS IMM
-        }
+        // srli and srai
+        case 0x5:
+            switch (funt7):
+                // srli
+                case 0x0:
+                    reg[rd] = reg[rs1] >> imm;
+                break;
+                // srai
+                case 0x20:
+                    if (reg[rs1] > 0) reg[rd] = reg[rs1] >> imm break;
+                    reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF;
+                break;       
         break;
-    
-    case 0x06:
-        //or HAS IMM
-        break;
-    
-    case 0x07:
-        //and HAS IMM
+        
+        // ori
+        case 0x6:
+            reg[rd] = reg[rsl] | imm;
         break;
 
-
-    default:
-        printf("in RtypeSwitch funct3 error: case not defined");
-        printf("funct3 value (unsigned int): %u", funct3);
+        // andi
+        case 0x7:
+            reg[rd] = reg[rs1] & imm;
         break;
     }
 }
