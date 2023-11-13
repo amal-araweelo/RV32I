@@ -42,8 +42,6 @@ int main(void) {
                 reg[rd] = reg[rs1] + imm;
                 break;
             // addi x1, x2, imm
-            case 
-
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
                 break;

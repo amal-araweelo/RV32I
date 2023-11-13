@@ -1,19 +1,18 @@
 #include "example.h"
+#include <stdlib.h>
 
-struct Example {
-    int ex;
-};
-
-struct Example* Example_create(int ex) {
-    struct Example* example = malloc(sizeof(struct Example));
-    example->ex = ex;
-    return example;
+struct Example* Example_Create(int ex) {
+    struct Example* instance = (struct Example*)malloc(sizeof(struct Example));
+    if (instance) {
+        instance->ex = ex;
+    }
+    return instance;
 }
 
-int Example_getEx(const struct Example* example) {
-    return example->ex;
+int Example_GetEx(const struct Example* instance) {
+    return instance->ex;
 }
 
-void Example_setEx(struct Example* example, int newEx) {
-    example->ex = newEx;
+void Example_SetEx(struct Example* instance, int newEx) {
+    instance->ex = newEx;
 }

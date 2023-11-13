@@ -5,10 +5,8 @@ struct Example {
     int ex;
 };
 
-void Example_init(struct Example *example, int ex);
+struct Example* Example_Create(int ex);
+int Example_GetEx(const struct Example* instance);
+void Example_SetEx(struct Example* instance, int newEx);
 
-int Example_getEx(const struct Example *example);
-
-void Example_setEx(struct Example *example, int newEx);
-
-#endif
+#endif // EXAMPLE_H
