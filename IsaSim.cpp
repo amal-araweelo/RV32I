@@ -25,7 +25,7 @@ using namespace std;
 int main(void) {
 
     uint32_t pc(0);
-    array<uint32_t, 4> reg = array<uint32_t, 4>();
+    array<uint32_t, 31> reg = array<uint32_t, 31>();
 
     // Here the first program hard coded as an array
     array<uint32_t, 3> progr = {
