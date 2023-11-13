@@ -20,7 +20,7 @@
 
 //Function Prototypes
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t imm);
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t imm, uint32_t * reg);
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
 
 int main(void) {
@@ -48,7 +48,7 @@ int main(void) {
         switch (opcode) {
             // I-type instructions
             case 0x13:
-                ItypeSwitch(funct3, funct7, rd, rs1, rs2);
+                ItypeSwitch(funct3, funct7, rd, rs1, imm, reg);
                 break;
             case 0x33:
                 RtypeSwitch(funct3, funct7,rd, rs1, rs2);
