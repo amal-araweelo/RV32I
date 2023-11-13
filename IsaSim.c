@@ -23,9 +23,9 @@ int main(void) {
     uint32_t reg[32] = {0};
     
     uint32_t progr[3] = {
-        0x00200093, 
-        0x00300113, 
-        0x002081b3, 
+        0x00200093, // addi x1 x0 2
+        0x00300113, // addi x2 x0 3
+        0x002081b3, // add x3 x1 x2
     };
     
     printf("Hello RISC-V World!\n");
