@@ -56,17 +56,18 @@ int main(void) {
 
                     // slti
                     case (0x3):
-                        if (reg[s1] <imm ) reg[rd] = 1;
+                        if (reg[s1] < imm ) reg[rd] = 1;
                         else reg[rd] = 0;
                     break;
 
                     // xori
                     case (0x4):
-
+                        reg[rd] = reg[rs1] ^ imm;
                     break;
 
+                    // srli og srai
                     case (0x5):
-
+                        
                     break;
 
                     case (0x6):
