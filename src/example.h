@@ -1,30 +1,14 @@
-//Example header file
-#pragma once
+#ifndef EXAMPLE_H
+#define EXAMPLE_H
 
-class Example {
-private:
+struct Example {
     int ex;
-
-public:
-    //disallow default construction example
-    Example() = delete;
-
-    //disallow copy example
-    Example(const Example &) = delete;
-
-    //Example constructor
-    Example(int ex);
-
-    //Example methods with example doc
-    /**
-     * @brief Getter function for the example attribute
-     * @returns the example attribute
-     */
-    int getEx() const;
-
-    /**
-     * @brief Setter function for the example attribute
-     * @param newEx the new value that will be given to the attribute
-     */
-    void setEx(int newEx);
 };
+
+void Example_init(struct Example *example, int ex);
+
+int Example_getEx(const struct Example *example);
+
+void Example_setEx(struct Example *example, int newEx);
+
+#endif

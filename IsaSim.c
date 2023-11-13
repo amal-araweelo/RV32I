@@ -37,9 +37,13 @@ int main(void) {
         unsigned int imm = (instr >> 20);
         
         switch (opcode) {
+            // add x1, x2, x3
             case 0x13:
                 reg[rd] = reg[rs1] + imm;
                 break;
+            // addi x1, x2, imm
+            case 
+
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
                 break;

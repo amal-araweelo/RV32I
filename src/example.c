@@ -1,14 +1,19 @@
-//Example source file
 #include "example.h"
 
-//Example constructor implementation
-Example::Example(int ex) : ex(ex) {}
+struct Example {
+    int ex;
+};
 
-//Example methods implementation
-int Example::getEx() const {
-    return this->ex;
+struct Example* Example_create(int ex) {
+    struct Example* example = malloc(sizeof(struct Example));
+    example->ex = ex;
+    return example;
 }
 
-void Example::setEx(int newEx) {
-    this->ex = newEx;
+int Example_getEx(const struct Example* example) {
+    return example->ex;
+}
+
+void Example_setEx(struct Example* example, int newEx) {
+    example->ex = newEx;
 }
