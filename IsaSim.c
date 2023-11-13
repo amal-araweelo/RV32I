@@ -35,6 +35,7 @@ int main(void) {
         uint32_t opcode = instr & 0x7f;
         uint32_t rd = (instr >> 7) & 0x01f;
         uint32_t rs1 = (instr >> 15) & 0x01f;
+        uint32_t rs2 = (instr >> 20) & 0x01f;
         uint32_t imm = (instr >> 20);
         
         switch (opcode) {
