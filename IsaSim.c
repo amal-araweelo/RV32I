@@ -18,6 +18,9 @@
 
 #define NO_ERR 0
 
+//Function Prototypes
+void RtypeSwitch(uint32_t func3, uint32_t func7, uint32_t rd, uint32_t rs1, uint32_t rs2);
+
 int main(void) {
     uint32_t pc = 0;
     uint32_t reg[32] = {0};
@@ -45,7 +48,8 @@ int main(void) {
                 break;
             case 0
 
-
+            case 0x33:
+                void 
 
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
