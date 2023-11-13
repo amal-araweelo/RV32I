@@ -123,35 +123,45 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
     switch (funct3)
     {
     case 0x00:
-        /* code */
+        if(funct7 != 0){
+            //sub 
+        }
+        else{
+            //add HAS IMM
+        }
         break;
     
     case 0x01:
-        /* code */
+        //sll HAS IMM
         break;
     
     case 0x02:
-        /* code */
+        //slt HAS IMM
         break;
 
     case 0x03:
-        /* code */
+        //sltu HAS IMM
         break;
 
     case 0x04:
-        /* code */
+        //xor HAS IMM
         break;
 
     case 0x05:
-        /* code */
+        if(funct7 != 0){
+            //sra HAS IMM
+        }
+        else{
+            //srl HAS IMM
+        }
         break;
     
     case 0x06:
-        /* code */
+        //or HAS IMM
         break;
     
     case 0x07:
-        /* code */
+        //and HAS IMM
         break;
 
 
