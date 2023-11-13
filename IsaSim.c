@@ -39,11 +39,14 @@ int main(void) {
         uint32_t imm = (instr >> 20);
         
         switch (opcode) {
-            // add x1, x2, x3
+            // addi x1, x2, imm
             case 0x13:
                 reg[rd] = reg[rs1] + imm;
                 break;
-            // addi x1, x2, imm
+            case 0
+
+
+
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
                 break;
@@ -78,4 +81,3 @@ int add(int isImm){
 	rd = a+b;
 }
 */
-
