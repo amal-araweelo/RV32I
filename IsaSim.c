@@ -48,40 +48,51 @@ int main(void) {
             case 0x13:
                 switch (funct3){
                     // addi
-                    case (0x0):
+                    case 0x0:
                         reg[rd] = reg[rs1] + imm;
                     break;
                     
                     // slli
-                    case (0x1):
+                    case 0x1:
                         reg[rd] = reg[rs1] << imm;
                     break;
 
                     // slti
-                    case (0x3):
-                        if (reg[s1] < imm ) reg[rd] = 1;
-                        else reg[rd] = 0;
+                    case 0x3:
+                        if (reg[rs1] < imm ) reg[rd] = 1 break;
+                        reg[rd] = 0;
                     break;
 
                     // xori
-                    case (0x4):
+                    case 0x4:
                         reg[rd] = reg[rs1] ^ imm;
                     break;
 
-                    // srli og srai
-                    case (0x5):
-                        
+                    // srli and srai
+                    case 0x5:
+                        switch (funt7):
+                            // srli
+                            case 0x0:
+                                reg[rd] = reg[rs1] >> imm;
+                            break;
+                            // srai
+                            case 0x20:
+                                if (reg[rs1] > 0) reg[rd] = reg[rs1] >> imm break;
+                                reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF;
+                            break;       
+                    break;
+                    
+                    // ori
+                    case 0x6:
+                        reg[rd] = reg[rsl] | imm;
                     break;
 
-                    case (0x6):
-
-                    break;
-
-                    case (0x7):
-
+                    // andi
+                    case 0x7:
+                        reg[rd] = reg[rs1] & imm;
                     break;
                 }
-            case 0x33:
+case 0x33:
                 RtypeSwitch(funct3, funct7,rd, rs1, rs2);
                 break;
             default:
