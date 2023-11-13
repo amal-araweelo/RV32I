@@ -70,7 +70,8 @@ int main(void) {
         
         printf("\n");
     }
-    
+    //TODO: Register dump
+
     printf("Program exit\n");
     return NO_ERR;
 }
@@ -88,12 +89,12 @@ int add(int isImm){
 }
 */
 
-void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
+void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, uint32_t* reg){
 switch (funct3)
 {
 case 0x00:
     if(funct7 != 0){
-        //sub 
+        // rs1 - rs2 
     }
     else{
         //add HAS IMM
