@@ -14,14 +14,15 @@
  * @author Martin Schoeberl (martin@jopdesign.com), Andrew Dobis (andrew.dobis@alumni.epfl.ch)
  */
 #include <stdio.h>
+#include <stdint.h>
 
 #define NO_ERR 0
 
 int main(void) {
-    unsigned int pc = 0;
-    unsigned int reg[32] = {0};
+    uint32_t pc = 0;
+    uint32_t reg[32] = {0};
     
-    unsigned int progr[3] = {
+    uint32_t progr[3] = {
         0x00200093, 
         0x00300113, 
         0x002081b3, 
@@ -30,11 +31,11 @@ int main(void) {
     printf("Hello RISC-V World!\n");
     
     while(1) {
-        unsigned int instr = progr[pc >> 2];
-        unsigned int opcode = instr & 0x7f;
-        unsigned int rd = (instr >> 7) & 0x01f;
-        unsigned int rs1 = (instr >> 15) & 0x01f;
-        unsigned int imm = (instr >> 20);
+        uint32_t instr = progr[pc >> 2];
+        uint32_t opcode = instr & 0x7f;
+        uint32_t rd = (instr >> 7) & 0x01f;
+        uint32_t rs1 = (instr >> 15) & 0x01f;
+        uint32_t imm = (instr >> 20);
         
         switch (opcode) {
             // add x1, x2, x3
