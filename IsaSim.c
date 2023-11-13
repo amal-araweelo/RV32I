@@ -120,5 +120,44 @@ int add(int isImm){
 */
 
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
+    switch (funct3)
+    {
+    case 0x00:
+        /* code */
+        break;
+    
+    case 0x01:
+        /* code */
+        break;
+    
+    case 0x02:
+        /* code */
+        break;
 
+    case 0x03:
+        /* code */
+        break;
+
+    case 0x04:
+        /* code */
+        break;
+
+    case 0x05:
+        /* code */
+        break;
+    
+    case 0x06:
+        /* code */
+        break;
+    
+    case 0x07:
+        /* code */
+        break;
+
+
+    default:
+        printf("in RtypeSwitch funct3 error: case not defined");
+        printf("funct3 value (unsigned int): %u", funct3);
+        break;
+    }
 }
