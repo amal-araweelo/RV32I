@@ -40,17 +40,46 @@ int main(void) {
         uint32_t rs1 = (instr >> 15) & 0x01f;
         uint32_t rs2 = (instr >> 20) & 0x01f;
         uint32_t imm = (instr >> 20);
+        uint32_t funct3 = (instr >> 12) & 0x007;
+        uint32_t funtc7 = (instr >> 25) & 0x07f; 
         
         switch (opcode) {
-            // addi x1, x2, imm
+            // I-type instructions
             case 0x13:
-                reg[rd] = reg[rs1] + imm;
-                break;
-            case 0
+                switch (funct3){
+                    // addi
+                    case (0x0):
+                        reg[rd] = reg[rs1] + imm;
+                    break;
+                    
+                    // slli
+                    case (0x1):
+                        reg[rd] = reg[rs1] << imm;
+                    break;
 
-            case 0x33:
-                void 
+                    // slti
+                    case (0x3):
+                        if (reg[s1] <imm ) reg[rd] = 1;
+                        else reg[rd] = 0;
+                    break;
 
+                    // xori
+                    case (0x4):
+
+                    break;
+
+                    case (0x5):
+
+                    break;
+
+                    case (0x6):
+
+                    break;
+
+                    case (0x7):
+
+                    break;
+                }
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
                 break;
