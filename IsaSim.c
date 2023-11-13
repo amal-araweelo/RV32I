@@ -20,7 +20,7 @@
 
 //Function Prototypes
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t imm);
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
 
 int main(void) {
@@ -141,7 +141,7 @@ default:
 }
 }
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t imm, uint32_t * reg){
     switch (funct3){
         // addi
         case 0x0:
@@ -187,5 +187,9 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
         case 0x7:
             reg[rd] = reg[rs1] & imm;
         break;
+
+        default:
+            printf("in ItypeSwitch error: case not defined");
     }
+
 }
