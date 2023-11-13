@@ -19,7 +19,7 @@
 #define NO_ERR 0
 
 //Function Prototypes
-void RtypeSwitch(uint32_t func3, uint32_t func7, uint32_t rd, uint32_t rs1, uint32_t rs2);
+void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2);
 
 int main(void) {
     uint32_t pc = 0;
@@ -41,7 +41,7 @@ int main(void) {
         uint32_t rs2 = (instr >> 20) & 0x01f;
         uint32_t imm = (instr >> 20);
         uint32_t funct3 = (instr >> 12) & 0x007;
-        uint32_t funtc7 = (instr >> 25) & 0x07f; 
+        uint32_t funct7 = (instr >> 25) & 0x07f; 
         
         switch (opcode) {
             // I-type instructions
@@ -80,6 +80,9 @@ int main(void) {
 
                     break;
                 }
+            case 0x33:
+                RtypeSwitch(funct3, funct7,rd, rs1, rs2);
+                break;
             default:
                 printf("Opcode %u not yet implemented\n", opcode);
                 break;
@@ -114,3 +117,7 @@ int add(int isImm){
 	rd = a+b;
 }
 */
+
+void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2){
+
+}
