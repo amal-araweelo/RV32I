@@ -44,21 +44,23 @@ int main(void) {
             // I-type instructions
             case 0x13:
                 switch (funct3){
-                    // addi x1, x2, imm
+                    // addi
                     case (0x0):
                         reg[rd] = reg[rs1] + imm;
                     break;
                     
-                    // slli x1, x2, imm
+                    // slli
                     case (0x1):
                         reg[rd] = reg[rs1] << imm;
                     break;
 
+                    // slti
                     case (0x3):
-                        if (reg[s1] <imm ) red[rd] = 1;
-                        else reg[rd] = 0
+                        if (reg[s1] <imm ) reg[rd] = 1;
+                        else reg[rd] = 0;
                     break;
 
+                    // xori
                     case (0x4):
 
                     break;
