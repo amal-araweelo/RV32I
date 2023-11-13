@@ -67,3 +67,15 @@ int main(void) {
 }
 
 
+/* example function to handle both rs2 and imm
+int add(int isImm){
+	uint32_t a = rs1;
+	uint32_t b = rs2;
+	if (isImm == true){
+		b = imm;
+	}
+
+	rd = a+b;
+}
+*/
+
