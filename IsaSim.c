@@ -16,8 +16,10 @@
  */
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define NO_ERR 0
+#define ERR 1
 
 // Function Prototypes
 
@@ -26,19 +28,73 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
 		 uint32_t rs2, uint32_t *reg);
 
-int main(void) {
+// Main function
+int main(int argc, char *argv[]) {
+	uint32_t *progr;
+	uint32_t num_instructions;
 	uint32_t pc = 0;
 	uint32_t reg[32] = {0};
 
-	uint32_t progr[3] = {
-	    0x00200093, // addi x1 x0 2
-	    0x00300113, // addi x2 x0 3
-	    0x002081b3, // add x3 x1 x2
-	};
+	// Declare file pointer
+	FILE *file;
 
-	printf("Hello RISC-V World!\n");
+	// Checks if input file is given
+	if (argc != 2) {
+		printf("in file input error: no input file\n");
+		exit(ERR);
+	}
+
+	// Open file for reading
+	file = fopen(argv[1], "r");
+
+	// Error handling if fopen() returns NULL pointer
+	if (file == NULL) {
+		fprintf(stderr,
+			"in file opening: couldn't open %s for reading\n",
+			argv[1]);
+		exit(ERR);
+	}
+
+	// Determines the length of the file
+	fseek(file, 0, SEEK_END); // moves pointer to end of file
+	uint32_t file_size = ftell(file);
+	fseek(file, 0, SEEK_SET); // moves pointer to beginning of file
+
+	// Assuming each instruction is 4 bytes (32 bits)
+	num_instructions = file_size / sizeof(uint32_t);
+
+	// Allocating memory for the program array
+	progr = (uint32_t *)malloc(num_instructions * sizeof(uint32_t));
+
+	// Error handling if memory allocation fails
+	if (progr == NULL) {
+		fprintf(stderr, "error in memory allocation\n");
+		fclose(file);
+		exit(ERR);
+	}
+
+	// Reading the binary file into the program array
+	fread(progr, sizeof(uint32_t), num_instructions, file);
+
+	// Closing file
+	fclose(file);
+
+	for (uint32_t i = 0; i < num_instructions; i++) {
+		// Converts big endian to little endian
+		progr[i] =
+		    ((progr[i] & 0xFF000000) >> 24) | // moves byte 3 to byte 0
+		    ((progr[i] & 0x00FF0000) >> 8) |  // moves byte 1 to byte 2
+		    ((progr[i] & 0x0000FF00) << 8) |  // moves byte 2 to byte 1
+		    ((progr[i] & 0x000000FF) << 24);  // moves byte 0 to byte 3
+	}
 
 	while (1) {
+
+		// Breaks out of while(1)-loop if end of instructions is met
+		if ((pc >> 2) >= num_instructions) {
+			break;
+		}
+
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
 		uint32_t rd = (instr >> 7) & 0x01f;
@@ -63,19 +119,19 @@ int main(void) {
 
 		pc += 4;
 
-		if ((pc >> 2) >= sizeof(progr) / sizeof(progr[0])) {
-			break;
-		}
-
 		for (size_t i = 0; i < sizeof(reg) / sizeof(reg[0]); ++i) {
-			printf("%u ", reg[i]);
+			printf("%d ", reg[i]);
 		}
-
 		printf("\n");
 	}
+
 	// TODO: Register dump
 
 	printf("Program exit\n");
+
+	// Free program
+	free(progr);
+
 	return NO_ERR;
 }
 
@@ -97,11 +153,12 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
 	case 0x00:
 		if (funct7 != 0) {
 			// rs1 - rs2
+			reg[rd] = reg[rs1] - reg[rs2];
 		} else {
 			// add HAS IMM
+			reg[rd] = reg[rs1] + reg[rs2];
 		}
 		break;
-
 	case 0x01:
 		// sll HAS IMM
 		break;
