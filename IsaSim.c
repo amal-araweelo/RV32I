@@ -23,18 +23,18 @@
 
 // Function Prototypes
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
-		 uint32_t imm, uint32_t *reg);
-void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
-		 uint32_t rs2, uint32_t *reg);
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
+void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
 
-// Main function
 int main(int argc, char *argv[]) {
 	uint32_t *progr;
 	uint32_t num_instructions;
 	uint32_t pc = 0;
-	uint32_t reg[32] = {0};
+	int32_t reg[32] = {0};
 
+	// Reading binary file into program array
+
+	/***************************************************************************************/
 	// Declare file pointer
 	FILE *file;
 
@@ -49,9 +49,7 @@ int main(int argc, char *argv[]) {
 
 	// Error handling if fopen() returns NULL pointer
 	if (file == NULL) {
-		fprintf(stderr,
-			"in file opening: couldn't open %s for reading\n",
-			argv[1]);
+		fprintf(stderr, "in file opening: couldn't open %s for reading\n", argv[1]);
 		exit(ERR);
 	}
 
@@ -78,16 +76,7 @@ int main(int argc, char *argv[]) {
 
 	// Closing file
 	fclose(file);
-
-	for (uint32_t i = 0; i < num_instructions; i++) {
-		// Converts big endian to little endian
-		progr[i] =
-		    ((progr[i] & 0xFF000000) >> 24) | // moves byte 3 to byte 0
-		    ((progr[i] & 0x00FF0000) >> 8) |  // moves byte 1 to byte 2
-		    ((progr[i] & 0x0000FF00) << 8) |  // moves byte 2 to byte 1
-		    ((progr[i] & 0x000000FF) << 24);  // moves byte 0 to byte 3
-	}
-
+	/***************************************************************************************/
 	while (1) {
 
 		// Breaks out of while(1)-loop if end of instructions is met
@@ -100,18 +89,48 @@ int main(int argc, char *argv[]) {
 		uint32_t rd = (instr >> 7) & 0x01f;
 		uint32_t rs1 = (instr >> 15) & 0x01f;
 		uint32_t rs2 = (instr >> 20) & 0x01f;
-		uint32_t imm = (instr >> 20);
 		uint32_t funct3 = (instr >> 12) & 0x007;
 		uint32_t funct7 = (instr >> 25) & 0x07f;
+
+		/***************************************************************************************/
+		// Immediate extraction based on opcode
+
+		int32_t imm;
+
+		switch (opcode) {
+		case 0x37:
+			// No need to handle sign-extension since only upper 20
+			// bits are used
+			imm = instr >> 12;
+			break;
+			// tilføj U, SB, UJ, S
+
+		default:
+			// Handle sign extension if needed for 12-bit immediate
+			imm = instr >> 20;
+			if (imm & 0x800) { // If MSB = 1 (negative integer)
+				imm |= 0xFFFFF000;
+			}
+			break;
+		}
+		/***************************************************************************************/
 
 		switch (opcode) {
 		// I-type instructions
 		case 0x13:
 			ItypeSwitch(funct3, funct7, rd, rs1, imm, reg);
 			break;
+
+		// R-type instructions
 		case 0x33:
 			RtypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
 			break;
+
+		// lui instruction
+		case 0x37:
+			reg[rd] = imm << 12;
+			break;
+
 		default:
 			printf("Opcode %u not yet implemented\n", opcode);
 			break;
@@ -147,8 +166,7 @@ int add(int isImm){
 }
 */
 
-void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
-		 uint32_t rs2, uint32_t *reg) {
+void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg) {
 	switch (funct3) {
 	case 0x00:
 		if (funct7 != 0) {
@@ -198,8 +216,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
 	}
 }
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
-		 uint32_t imm, uint32_t *reg) {
+void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg) {
 	switch (funct3) {
 	// addi
 	case 0x0:
@@ -236,7 +253,7 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1,
 			if (reg[rs1] > 0)
 				reg[rd] = reg[rs1] >> imm;
 			break;
-			reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF;
+			reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF; // tror ikke den her virker
 			break;
 		}
 		break;
