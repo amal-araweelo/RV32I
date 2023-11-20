@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	uint32_t pc = 0;
 	int32_t reg[32] = {0};
 
-	// Reading binary file into program array
+	//                   Reading binary file into program array
 
 	/***************************************************************************************/
 	// Declare file pointer
@@ -220,7 +220,8 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 	case 0x06:
 		// or HAS IMM
-		reg[rd] = reg[rs1] ^ reg[rs2] break;
+		reg[rd] = reg[rs1] ^ reg[rs2];
+		break;
 
 	case 0x07:
 		// and HAS IMM
@@ -246,12 +247,34 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 		break;
 
 	// slti
-	case 0x3:
-		if (reg[rs1] < imm)
+	case 0x2:
+		// Handle sign extension if needed for the 32-bit imm
+		imm = (imm << 12) >> 12;
+		if (imm & 0x80000000) { // If MSB = 1 (negative integer)
+			imm |= 0xFFF00000;
+		}
+		if (reg[rs1] < imm) {
 			reg[rd] = 1;
+		} else {
+			reg[rd] = 0;
+		}
 		break;
-		reg[rd] = 0;
+
+	// sltiu (VIRKER IKKE!)
+	case 0x3:
+		// Handle sign extension if needed for the 32-bit imm
+		imm = (imm << 12) >> 12;
+		if (imm & 0x80000000) { // If MSB = 1 (negative integer)
+			imm |= 0xFFF00000;
+		}
+		if ((uint32_t)reg[rs1] < (uint32_t)imm) {
+			reg[rd] = 1;
+		} else {
+			reg[rd] = 0;
+		}
 		break;
+
+	// sltu
 
 	// xori
 	case 0x4:
@@ -269,10 +292,8 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 		case 0x20:
 			if (reg[rs1] > 0) {
 				reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> imm));
-				break;
 			} else {
 				reg[rd] = reg[rs1] >> imm;
-				break;
 			}
 			break;
 		}
