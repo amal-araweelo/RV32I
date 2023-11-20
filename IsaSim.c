@@ -110,6 +110,8 @@ int main(int argc, char *argv[]) {
 		int32_t imm;
 
 		switch (opcode) {
+
+		case 0x73: // ecall opcode
 		case 0x37:
 			// No need to handle sign-extension since only upper 20
 			// bits are used
@@ -208,6 +210,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 	case 0x05:
 		if (funct7 != 0) {
 			// sra HAS IMM
+
 		} else {
 			// srl HAS IMM
 		}
@@ -223,7 +226,6 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 	default:
 		printf("in RtypeSwitch funct3 error: case not defined");
-		printf("funct3 value (unsigned int): %u", funct3);
 		break;
 	}
 }
