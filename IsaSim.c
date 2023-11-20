@@ -202,11 +202,8 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 		break;
 
 	case 0x02: // set less than
-		//Make signed variables
-		int32_t reg1 = reg[rs1]
-		int32_t reg2 = reg[rs2]
-		//Perform comparison
-		if (reg1 < reg2) {
+		// Perform comparison
+		if (reg[rs1] < reg[rs2]) {
 			reg[rd] = 1;
 		} else {
 			reg[rd] = 0;
@@ -214,7 +211,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 		break;
 
 	case 0x03: // set less than unsigned
-		if (reg[rs1] < reg[rs2]) {
+		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
 			reg[rd] = 1;
 		} else {
 			reg[rd] = 0;
@@ -228,7 +225,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 	case 0x05:
 		if (funct7 != 0) {
 			if (reg[rs1] > 0) {
-				reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> reg[rs2]));
+				reg[rd] = (int32_t)(((uint32_t)reg[rs1] >> (uint32_t)reg[rs2]));
 			} else {
 				reg[rd] = reg[rs1] >> reg[rs2];
 			}
