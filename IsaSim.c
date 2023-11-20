@@ -193,6 +193,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 		break;
 	case 0x01:
 		// sll HAS IMM
+
 		break;
 
 	case 0x02:
@@ -205,6 +206,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 	case 0x04:
 		// xor HAS IMM
+		reg[rd] = reg[rs1] ^ reg[rs2];
 		break;
 
 	case 0x05:
@@ -218,10 +220,11 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 	case 0x06:
 		// or HAS IMM
-		break;
+		reg[rd] = reg[rs1] ^ reg[rs2] break;
 
 	case 0x07:
 		// and HAS IMM
+		reg[rd] = reg[rs1] & reg[rs2];
 		break;
 
 	default:
