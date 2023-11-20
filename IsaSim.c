@@ -13,18 +13,29 @@
  *
  * @author Martin Schoeberl (martin@jopdesign.com), Andrew Dobis
  * (andrew.dobis@alumni.epfl.ch)
+ * For at køre program med fil
+ * ./isasim "/mht/c/Users/.../test.bin"
+ *
  */
+
+/*****************************************************************************************/
+
+// Header files
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+// Defintions
 #define NO_ERR 0
 #define ERR 1
 
-// Function Prototypes
+// Function prototypes
 
 void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
 void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
+
+/*****************************************************************************************/
 
 int main(int argc, char *argv[]) {
 	uint32_t *progr;
@@ -78,6 +89,7 @@ int main(int argc, char *argv[]) {
 	fclose(file);
 	/***************************************************************************************/
 	while (1) {
+		// Implement ecall exit
 
 		// Breaks out of while(1)-loop if end of instructions is met
 		if ((pc >> 2) >= num_instructions) {
@@ -218,7 +230,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg) {
 	switch (funct3) {
-	// addi
+	// addi and ecall
 	case 0x0:
 		reg[rd] = reg[rs1] + imm;
 		break;
@@ -246,14 +258,17 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 		switch (funct7) {
 		// srli
 		case 0x0:
-			reg[rd] = reg[rs1] >> imm;
+			reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> imm));
 			break;
 		// srai
 		case 0x20:
-			if (reg[rs1] > 0)
+			if (reg[rs1] > 0) {
+				reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> imm));
+				break;
+			} else {
 				reg[rd] = reg[rs1] >> imm;
-			break;
-			reg[rd] = (reg[rs1] >> imm) & 0xFFFFFFFF; // tror ikke den her virker
+				break;
+			}
 			break;
 		}
 		break;
