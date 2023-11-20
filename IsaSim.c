@@ -105,23 +105,22 @@ int main(int argc, char *argv[]) {
 		uint32_t funct3 = (instr >> 12) & 0x007;
 		uint32_t funct7 = (instr >> 25) & 0x07f;
 
-		/***************************************************************************************/
+		/************************************************************************************/
 		//                     Immediate extraction based on opcode
 
 		int32_t imm;
 
 		switch (opcode) {
 
-		// U-type instruction (lui)
-		case 0x37:
-			// No need to handle sign-extension since only upper 20
-			// bits are used
+		// U-type instruction
+		case 0x17: // auipc
+		case 0x37: // lui
+			// No need to handle sign-extension since only upper 20 bits are used
 			imm = instr >> 12;
 			break;
-			// tilføj U, SB, UJ, S
 
+		// I-type instruction
 		default:
-			// I-type instruction
 			// Handle sign extension if needed for 12-bit immediate
 			imm = instr >> 20;
 			if (imm & 0x800) { // If MSB = 1 (negative integer)
@@ -129,7 +128,7 @@ int main(int argc, char *argv[]) {
 			}
 			break;
 		}
-		/***************************************************************************************/
+		/***********************************************************************************/
 
 		switch (opcode) {
 		// I-type instructions
@@ -147,6 +146,10 @@ int main(int argc, char *argv[]) {
 			reg[rd] = imm << 12;
 			break;
 
+		// auipc instruction
+		case 0x17:
+
+			break;
 		default:
 			printf("Opcode %u not yet implemented\n", opcode);
 			break;
