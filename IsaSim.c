@@ -233,7 +233,7 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 
 		} else {
 			// srl
-			reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> reg[rs2]));
+			reg[rd] = ((uint32_t)reg[rs1] >> (uint32_t)reg[rs2]);
 		}
 		break;
 
@@ -301,12 +301,12 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 		switch (funct7) {
 		// srli
 		case 0x0:
-			reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> imm));
+			reg[rd] = (int32_t)((uint32_t)reg[rs1] >> imm);
 			break;
 		// srai
 		case 0x20:
 			if (reg[rs1] > 0) {
-				reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> imm));
+				reg[rd] = (int32_t)(((uint32_t)reg[rs1] >> imm));
 			} else {
 				reg[rd] = reg[rs1] >> imm;
 			}
