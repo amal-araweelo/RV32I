@@ -218,12 +218,13 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 		}
 		break;
 
-	case 0x04:
+	case 0x04: // XOR
 		reg[rd] = reg[rs1] ^ reg[rs2];
 		break;
 
 	case 0x05:
 		if (funct7 != 0) {
+			// sra
 			if (reg[rs1] > 0) {
 				reg[rd] = (int32_t)(((uint32_t)reg[rs1] >> (uint32_t)reg[rs2]));
 			} else {
@@ -231,17 +232,16 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 			}
 
 		} else {
+			// srl
 			reg[rd] = (int32_t)((uint32_t)(reg[rs1] >> reg[rs2]));
 		}
 		break;
 
-	case 0x06:
-		// or HAS IMM
+	case 0x06: // OR
 		reg[rd] = reg[rs1] | reg[rs2];
 		break;
 
-	case 0x07:
-		// and HAS IMM
+	case 0x07: // AND
 		reg[rd] = reg[rs1] & reg[rs2];
 		break;
 
