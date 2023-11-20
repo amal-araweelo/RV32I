@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	uint32_t pc = 0;
 	int32_t reg[32] = {0};
 
-	//                   Reading binary file into program array
+	//                     Reading binary file into program array
 
 	/***************************************************************************************/
 	// Declare file pointer
@@ -87,6 +87,7 @@ int main(int argc, char *argv[]) {
 
 	// Closing file
 	fclose(file);
+
 	/***************************************************************************************/
 	while (1) {
 		// Implement ecall exit
@@ -105,13 +106,13 @@ int main(int argc, char *argv[]) {
 		uint32_t funct7 = (instr >> 25) & 0x07f;
 
 		/***************************************************************************************/
-		// Immediate extraction based on opcode
+		//                     Immediate extraction based on opcode
 
 		int32_t imm;
 
 		switch (opcode) {
 
-		case 0x73: // ecall opcode
+		// U-type instruction (lui)
 		case 0x37:
 			// No need to handle sign-extension since only upper 20
 			// bits are used
@@ -120,6 +121,7 @@ int main(int argc, char *argv[]) {
 			// tilføj U, SB, UJ, S
 
 		default:
+			// I-type instruction
 			// Handle sign extension if needed for 12-bit immediate
 			imm = instr >> 20;
 			if (imm & 0x800) { // If MSB = 1 (negative integer)
@@ -260,7 +262,7 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 		}
 		break;
 
-	// sltiu (VIRKER IKKE!)
+	// sltiu
 	case 0x3:
 		// Handle sign extension if needed for the 32-bit imm
 		imm = (imm << 12) >> 12;
@@ -273,8 +275,6 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 			reg[rd] = 0;
 		}
 		break;
-
-	// sltu
 
 	// xori
 	case 0x4:
