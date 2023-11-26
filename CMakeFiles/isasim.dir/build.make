@@ -83,10 +83,38 @@ CMakeFiles/isasim.dir/IsaSim.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/isasim.dir/IsaSim.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/IsaSim.c" -o CMakeFiles/isasim.dir/IsaSim.c.s
 
+CMakeFiles/isasim.dir/instructions.c.o: CMakeFiles/isasim.dir/flags.make
+CMakeFiles/isasim.dir/instructions.c.o: instructions.c
+CMakeFiles/isasim.dir/instructions.c.o: CMakeFiles/isasim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/isasim.dir/instructions.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/isasim.dir/instructions.c.o -MF CMakeFiles/isasim.dir/instructions.c.o.d -o CMakeFiles/isasim.dir/instructions.c.o -c "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/instructions.c"
+
+CMakeFiles/isasim.dir/instructions.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/isasim.dir/instructions.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/instructions.c" > CMakeFiles/isasim.dir/instructions.c.i
+
+CMakeFiles/isasim.dir/instructions.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/isasim.dir/instructions.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/instructions.c" -o CMakeFiles/isasim.dir/instructions.c.s
+
+CMakeFiles/isasim.dir/globals.c.o: CMakeFiles/isasim.dir/flags.make
+CMakeFiles/isasim.dir/globals.c.o: globals.c
+CMakeFiles/isasim.dir/globals.c.o: CMakeFiles/isasim.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/isasim.dir/globals.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/isasim.dir/globals.c.o -MF CMakeFiles/isasim.dir/globals.c.o.d -o CMakeFiles/isasim.dir/globals.c.o -c "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/globals.c"
+
+CMakeFiles/isasim.dir/globals.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/isasim.dir/globals.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/globals.c" > CMakeFiles/isasim.dir/globals.c.i
+
+CMakeFiles/isasim.dir/globals.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/isasim.dir/globals.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/globals.c" -o CMakeFiles/isasim.dir/globals.c.s
+
 CMakeFiles/isasim.dir/src/example.c.o: CMakeFiles/isasim.dir/flags.make
 CMakeFiles/isasim.dir/src/example.c.o: src/example.c
 CMakeFiles/isasim.dir/src/example.c.o: CMakeFiles/isasim.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/isasim.dir/src/example.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/isasim.dir/src/example.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/isasim.dir/src/example.c.o -MF CMakeFiles/isasim.dir/src/example.c.o.d -o CMakeFiles/isasim.dir/src/example.c.o -c "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/src/example.c"
 
 CMakeFiles/isasim.dir/src/example.c.i: cmake_force
@@ -100,16 +128,20 @@ CMakeFiles/isasim.dir/src/example.c.s: cmake_force
 # Object files for target isasim
 isasim_OBJECTS = \
 "CMakeFiles/isasim.dir/IsaSim.c.o" \
+"CMakeFiles/isasim.dir/instructions.c.o" \
+"CMakeFiles/isasim.dir/globals.c.o" \
 "CMakeFiles/isasim.dir/src/example.c.o"
 
 # External object files for target isasim
 isasim_EXTERNAL_OBJECTS =
 
 isasim: CMakeFiles/isasim.dir/IsaSim.c.o
+isasim: CMakeFiles/isasim.dir/instructions.c.o
+isasim: CMakeFiles/isasim.dir/globals.c.o
 isasim: CMakeFiles/isasim.dir/src/example.c.o
 isasim: CMakeFiles/isasim.dir/build.make
 isasim: CMakeFiles/isasim.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable isasim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable isasim"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/isasim.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -153,6 +153,54 @@ IsaSim.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/IsaSim.c.s
 .PHONY : IsaSim.c.s
 
+globals.o: globals.c.o
+.PHONY : globals.o
+
+# target to build an object file
+globals.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/globals.c.o
+.PHONY : globals.c.o
+
+globals.i: globals.c.i
+.PHONY : globals.i
+
+# target to preprocess a source file
+globals.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/globals.c.i
+.PHONY : globals.c.i
+
+globals.s: globals.c.s
+.PHONY : globals.s
+
+# target to generate assembly for a file
+globals.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/globals.c.s
+.PHONY : globals.c.s
+
+instructions.o: instructions.c.o
+.PHONY : instructions.o
+
+# target to build an object file
+instructions.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/instructions.c.o
+.PHONY : instructions.c.o
+
+instructions.i: instructions.c.i
+.PHONY : instructions.i
+
+# target to preprocess a source file
+instructions.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/instructions.c.i
+.PHONY : instructions.c.i
+
+instructions.s: instructions.c.s
+.PHONY : instructions.s
+
+# target to generate assembly for a file
+instructions.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/instructions.c.s
+.PHONY : instructions.c.s
+
 src/example.o: src/example.c.o
 .PHONY : src/example.o
 
@@ -189,6 +237,12 @@ help:
 	@echo "... IsaSim.o"
 	@echo "... IsaSim.i"
 	@echo "... IsaSim.s"
+	@echo "... globals.o"
+	@echo "... globals.i"
+	@echo "... globals.s"
+	@echo "... instructions.o"
+	@echo "... instructions.i"
+	@echo "... instructions.s"
 	@echo "... src/example.o"
 	@echo "... src/example.i"
 	@echo "... src/example.s"

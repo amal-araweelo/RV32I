@@ -9,6 +9,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/IsaSim.c" "CMakeFiles/isasim.dir/IsaSim.c.o" "gcc" "CMakeFiles/isasim.dir/IsaSim.c.o.d"
+  "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/globals.c" "CMakeFiles/isasim.dir/globals.c.o" "gcc" "CMakeFiles/isasim.dir/globals.c.o.d"
+  "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/instructions.c" "CMakeFiles/isasim.dir/instructions.c.o" "gcc" "CMakeFiles/isasim.dir/instructions.c.o.d"
   "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/src/example.c" "CMakeFiles/isasim.dir/src/example.c.o" "gcc" "CMakeFiles/isasim.dir/src/example.c.o.d"
   )
 

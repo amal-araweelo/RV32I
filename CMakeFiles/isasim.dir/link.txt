@@ -1,1 +1,1 @@
-/usr/bin/cc  -fsanitize=address CMakeFiles/isasim.dir/IsaSim.c.o CMakeFiles/isasim.dir/src/example.c.o -o isasim 
+/usr/bin/cc  -fsanitize=address CMakeFiles/isasim.dir/IsaSim.c.o CMakeFiles/isasim.dir/instructions.c.o CMakeFiles/isasim.dir/globals.c.o CMakeFiles/isasim.dir/src/example.c.o -o isasim 

@@ -18,29 +18,18 @@
  *
  */
 
+// OBS: VI MANGLER JAL, JALR, FUNCTIONS
+// TEST om store og load virker
 /*****************************************************************************************/
 
 // Header files
-
+#include "globals.h"
+#include "instructions.h"
+#include "opcodes.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-// Defintions
-
-#define NO_ERR 0
-#define ERR 1
-
-// Function prototypes
-
-void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
-void RTypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
-void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc);
-
-// Global variables
-uint8_t branch_taken = 0;
-
-/*****************************************************************************************/
+#include <string.h>
 
 int main(int argc, char *argv[]) {
 	uint32_t *progr = NULL;
@@ -100,13 +89,12 @@ int main(int argc, char *argv[]) {
 	// Closing file
 	fclose(file);
 
-	int32_t* mem_base = malloc(1048576); //mem base ptr for freeing at the end
-	reg[2] = mem_base;
+	int32_t *mem_base = malloc(1048576); // mem base ptr for freeing at the end
+	reg[2] = 1048576;
 
 	/***************************************************************************************/
 	while (1) {
 		// Intializing stack pointer to 1 MiB (mebibyte)
-		
 
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
@@ -124,14 +112,14 @@ int main(int argc, char *argv[]) {
 		switch (opcode) {
 
 		// U-type instruction
-		case 0x17: // auipc
-		case 0x37: // lui
+		case AUIPC: // auipc
+		case LUI:   // lui
 			// No need to handle sign-extension since only upper 20 bits are used
 			imm = instr >> 12;
 			break;
 
-		// SB-type instruction
-		case 0x63:
+		// SB-type instructions
+		case SB_TYPE:
 			imm = (((instr >> 31) & 0x1) << 12) | // imm[12]
 			      (((instr >> 7) & 0x1) << 11) |  // imm[11]
 			      (((instr >> 25) & 0x3F) << 5) | // imm[10:5]
@@ -159,49 +147,39 @@ int main(int argc, char *argv[]) {
 			/*******************************************************************************/
 			//                           I-type instructions
 
-		case 0x67: // jalr
+		case JALR: // jalr
 			reg[rd] = pc + 4;
 			pc = reg[rs1] + imm;
 			break;
 
-		case 0x73: // ecall instruction (Lav de andre ecalls)
-			if (reg[17] == 10) {
-				printf("Program exit\n");
-				free(progr);
-				exit(NO_ERR);
-			} else {
-				// Handle other ecall services
-				printf("Unsupported ecall service\n");
-				free(progr);
-				exit(ERR);
-			}
+		case ECALL: // ecall
+			EcallSwitch(reg, progr);
 			break;
-
-		case 0x13:
+		case I_TYPE:
 			ITypeSwitch(funct3, funct7, rd, rs1, imm, reg);
 			break;
 			/*******************************************************************************/
 			//                             R-type instructions
 
-		case 0x33:
+		case R_TYPE:
 			RTypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
 			break;
 
 			/*******************************************************************************/
 			//                             U-type instructions
 
-		case 0x37: // lui instruction
+		case LUI: // lui instruction
 			reg[rd] = imm << 12;
 			break;
 
-		case 0x17: // auipc instruction
+		case AUIPC: // auipc instruction
 			reg[rd] = pc + (imm << 12);
 			break;
 
 			/*******************************************************************************/
 			//                            SB-type instructions
 
-		case 0x63:
+		case SB_TYPE:
 			SBTypeSwitch(funct3, rs1, rs2, imm, reg, &pc);
 			break;
 
@@ -230,206 +208,3 @@ int main(int argc, char *argv[]) {
 
 	return NO_ERR;
 }
-
-void RTypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg) {
-	switch (funct3) {
-	case 0x00:
-		if (funct7 != 0) {
-			// rs1 - rs2
-			reg[rd] = reg[rs1] - reg[rs2];
-		} else {
-			// add HAS IMM
-			reg[rd] = reg[rs1] + reg[rs2];
-		}
-		break;
-	case 0x01:
-		// sll HAS IMM
-		reg[rd] = reg[rs1] << reg[rs2];
-		break;
-
-	case 0x02: // set less than
-		// Perform comparison
-		if (reg[rs1] < reg[rs2]) {
-			reg[rd] = 1;
-		} else {
-			reg[rd] = 0;
-		}
-		break;
-
-	case 0x03: // set less than unsigned
-		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
-			reg[rd] = 1;
-		} else {
-			reg[rd] = 0;
-		}
-		break;
-
-	case 0x04: // XOR
-		reg[rd] = reg[rs1] ^ reg[rs2];
-		break;
-
-	case 0x05:
-		if (funct7 != 0) {
-			// sra
-			if (reg[rs1] > 0) {
-				reg[rd] = (int32_t)(((uint32_t)reg[rs1] >> (uint32_t)reg[rs2]));
-			} else {
-				reg[rd] = reg[rs1] >> reg[rs2];
-			}
-
-		} else {
-			// srl
-			reg[rd] = ((uint32_t)reg[rs1] >> (uint32_t)reg[rs2]);
-		}
-		break;
-
-	case 0x06: // OR
-		reg[rd] = reg[rs1] | reg[rs2];
-		break;
-
-	case 0x07: // AND
-		reg[rd] = reg[rs1] & reg[rs2];
-		break;
-
-	default:
-		printf("in RtypeSwitch funct3 error: case not defined");
-		break;
-	}
-}
-
-void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg) {
-	switch (funct3) {
-	// addi
-	case 0x0:
-		reg[rd] = reg[rs1] + imm;
-		break;
-
-	// slli
-	case 0x1:
-		reg[rd] = reg[rs1] << imm;
-		break;
-
-	// slti
-	case 0x2:
-		// Handle sign extension if needed for the 32-bit imm
-		imm = (imm << 12) >> 12;
-		if (imm & 0x80000000) { // If MSB = 1 (negative integer)
-			imm |= 0xFFF00000;
-		}
-		if (reg[rs1] < imm) {
-			reg[rd] = 1;
-		} else {
-			reg[rd] = 0;
-		}
-		break;
-
-	// sltiu
-	case 0x3:
-		// Handle sign extension if needed for the 32-bit imm
-		imm = (imm << 12) >> 12;
-		if (imm & 0x80000000) { // If MSB = 1 (negative integer)
-			imm |= 0xFFF00000;
-		}
-		if ((uint32_t)reg[rs1] < (uint32_t)imm) {
-			reg[rd] = 1;
-		} else {
-			reg[rd] = 0;
-		}
-		break;
-
-	// xori
-	case 0x4:
-		reg[rd] = reg[rs1] ^ imm;
-		break;
-
-	// srli and srai
-	case 0x5:
-		switch (funct7) {
-		// srli
-		case 0x0:
-			reg[rd] = (int32_t)((uint32_t)reg[rs1] >> imm);
-			break;
-		// srai
-		case 0x20:
-			if (reg[rs1] > 0) {
-				reg[rd] = (int32_t)(((uint32_t)reg[rs1] >> imm));
-			} else {
-				reg[rd] = reg[rs1] >> imm;
-			}
-			break;
-		}
-		break;
-
-	// ori
-	case 0x6:
-		reg[rd] = reg[rs1] | imm;
-		break;
-
-	// andi
-	case 0x7:
-		reg[rd] = reg[rs1] & imm;
-		break;
-
-	default:
-		printf("in ItypeSwitch error: case not defined");
-	}
-}
-
-void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc) {
-
-	switch (funct3) {
-	// beq
-	case 0x0:
-		if (reg[rs1] == reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	// bne
-	case 0x1:
-		if (reg[rs1] != reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	// blt
-	case 0x4:
-		if (reg[rs1] < reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	// bge
-	case 0x5:
-		if (reg[rs1] >= reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	// bltu
-	case 0x6:
-		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	// bgeu
-	case 0x7:
-		if ((uint32_t)reg[rs1] >= (uint32_t)reg[rs2]) {
-			branch_taken = 1;
-			*pc += imm;
-		}
-		break;
-
-	default:
-		printf("in SBTypeSwitch error: case not defined");
-	}
-}
-
-
-// 
