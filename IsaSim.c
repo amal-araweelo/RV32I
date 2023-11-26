@@ -102,6 +102,8 @@ int main(int argc, char *argv[]) {
 
 	/***************************************************************************************/
 	while (1) {
+		// Intializing stack pointer to 1 MiB (mebibyte)
+		reg[2] = malloc(1048576);
 
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
@@ -138,7 +140,7 @@ int main(int argc, char *argv[]) {
 			}
 			break;
 
-		// I-type instruction
+		// I-type instructions
 		default:
 			// Handle sign extension if needed for 12-bit immediate
 			imm = instr >> 20;
@@ -150,32 +152,16 @@ int main(int argc, char *argv[]) {
 		/***********************************************************************************/
 
 		switch (opcode) {
-		// I-type instructions
-		case 0x13:
-			ITypeSwitch(funct3, funct7, rd, rs1, imm, reg);
+
+			/*******************************************************************************/
+			//                           I-type instructions
+
+		case 0x67: // jalr
+			reg[rd] = pc + 4;
+			pc = reg[rs1] + imm;
 			break;
 
-		// R-type instructions
-		case 0x33:
-			RTypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
-			break;
-
-		// U-type instructions
-		case 0x37: // lui instruction
-			reg[rd] = imm << 12;
-			break;
-
-		case 0x17: // auipc instruction
-			reg[rd] = pc + (imm << 12);
-			break;
-
-		// SB-type instructions
-		case 0x63:
-			SBTypeSwitch(funct3, rs1, rs2, imm, reg, &pc);
-			break;
-
-		// ecall instruction
-		case 0x73:
+		case 0x73: // ecall instruction (Lav de andre ecalls)
 			if (reg[17] == 10) {
 				printf("Program exit\n");
 				free(progr);
@@ -188,11 +174,39 @@ int main(int argc, char *argv[]) {
 			}
 			break;
 
+		case 0x13:
+			ITypeSwitch(funct3, funct7, rd, rs1, imm, reg);
+			break;
+			/*******************************************************************************/
+			//                             R-type instructions
+
+		case 0x33:
+			RTypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
+			break;
+
+			/*******************************************************************************/
+			//                             U-type instructions
+
+		case 0x37: // lui instruction
+			reg[rd] = imm << 12;
+			break;
+
+		case 0x17: // auipc instruction
+			reg[rd] = pc + (imm << 12);
+			break;
+
+			/*******************************************************************************/
+			//                            SB-type instructions
+
+		case 0x63:
+			SBTypeSwitch(funct3, rs1, rs2, imm, reg, &pc);
+			break;
+
 		default:
 			printf("Opcode %u not yet implemented\n", opcode);
 			break;
+			/*******************************************************************************/
 		}
-
 		// If branch was not taken PC is incremented
 		if (!branch_taken) {
 			pc += 4;
