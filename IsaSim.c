@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Open file for reading
-	file = fopen(argv[1], "rb");
+	file = fopen(argv[1], "r");
 
 	// Error handling if fopen() returns NULL pointer
 	if (file == NULL) {
@@ -362,7 +362,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	switch (funct3) {
 	// beq
 	case 0x0:
-		printf("PC: %d  BEQ: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] == reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
@@ -371,7 +370,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 	// bne
 	case 0x1:
-		printf("PC: %d  BNE: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] != reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
@@ -380,7 +378,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 	// blt
 	case 0x4:
-		printf("PC: %d  BLT: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] < reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
@@ -389,7 +386,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 	// bge
 	case 0x5:
-		printf("PC: %d  BGE: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] >= reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
@@ -398,7 +394,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 	// bltu
 	case 0x6:
-		printf("PC: %d  BLTU: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
@@ -407,7 +402,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 	// bgeu
 	case 0x7:
-		printf("PC: %d  BGEU: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if ((uint32_t)reg[rs1] >= (uint32_t)reg[rs2]) {
 			branch_taken = 1;
 			*pc += imm;
