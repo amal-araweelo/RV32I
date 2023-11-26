@@ -27,13 +27,18 @@
 #include <stdlib.h>
 
 // Defintions
+
 #define NO_ERR 0
 #define ERR 1
 
 // Function prototypes
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
-void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
+void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
+void RTypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
+void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, uint32_t *pc);
+
+// Global variables
+uint8_t branch_taken = 0;
 
 /*****************************************************************************************/
 
@@ -72,6 +77,13 @@ int main(int argc, char *argv[]) {
 	// Assuming each instruction is 4 bytes (32 bits)
 	num_instructions = file_size / sizeof(uint32_t);
 
+	// Check if there are any instructions in the program
+	if (num_instructions == 0) {
+		printf("Error: Empty program\n");
+		free(progr);
+		exit(ERR);
+	}
+
 	// Allocating memory for the program array
 	progr = (uint32_t *)malloc(num_instructions * sizeof(uint32_t));
 
@@ -90,13 +102,6 @@ int main(int argc, char *argv[]) {
 
 	/***************************************************************************************/
 	while (1) {
-		// Implement ecall exit
-
-		// Breaks out of while(1)-loop if end of instructions is met
-		if ((pc >> 2) >= num_instructions) {
-			break;
-		}
-
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
 		uint32_t rd = (instr >> 7) & 0x01f;
@@ -119,6 +124,20 @@ int main(int argc, char *argv[]) {
 			imm = instr >> 12;
 			break;
 
+		// SB-type instruction
+		case 0x63:
+			imm = (((instr & 0x80000000) >> 19) | // imm[12]
+			       ((instr & 0x80) << 4) |	      // imm[11]
+			       ((instr & 0x7E000000) >> 20) | // imm[10:5]
+			       ((instr & 0xF00) >> 7))	      // imm[4:1]
+			    ;
+
+			// Handle sign extension if needed for 13-bit immediate
+			if (imm & 0x1000) { // If MSB = 1 (negative integer)
+				imm |= 0xFFFFE000;
+			}
+			break;
+
 		// I-type instruction
 		default:
 			// Handle sign extension if needed for 12-bit immediate
@@ -133,23 +152,41 @@ int main(int argc, char *argv[]) {
 		switch (opcode) {
 		// I-type instructions
 		case 0x13:
-			ItypeSwitch(funct3, funct7, rd, rs1, imm, reg);
+			ITypeSwitch(funct3, funct7, rd, rs1, imm, reg);
 			break;
 
 		// R-type instructions
 		case 0x33:
-			RtypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
+			RTypeSwitch(funct3, funct7, rd, rs1, rs2, reg);
 			break;
 
-		// lui instruction
-		case 0x37:
+		// U-type instructions
+		case 0x37: // lui instruction
 			reg[rd] = imm << 12;
 			break;
-
-		// auipc instruction
-		case 0x17:
-
+		case 0x17: // auipc instruction
+			reg[rd] = pc + (imm << 12);
 			break;
+
+		// SB-type instructions
+		case 0x63:
+			SBTypeSwitch(funct3, rs1, rs2, imm, reg, &pc);
+			break;
+
+		// ecall instruction
+		case 0x73:
+			if (reg[17] == 10) {
+				printf("Program exit\n");
+				free(progr);
+				exit(NO_ERR);
+			} else {
+				// Handle other ecall services
+				printf("Unsupported ecall service\n");
+				free(progr);
+				exit(ERR);
+			}
+			break;
+
 		default:
 			printf("Opcode %u not yet implemented\n", opcode);
 			break;
@@ -173,19 +210,7 @@ int main(int argc, char *argv[]) {
 	return NO_ERR;
 }
 
-/* example function to handle both rs2 and imm
-int add(int isImm){
-		uint32_t a = rs1;
-		uint32_t b = rs2;
-		if (isImm == true){
-				b = imm;
-		}
-
-		rd = a+b;
-}
-*/
-
-void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg) {
+void RTypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg) {
 	switch (funct3) {
 	case 0x00:
 		if (funct7 != 0) {
@@ -251,9 +276,9 @@ void RtypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, ui
 	}
 }
 
-void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg) {
+void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg) {
 	switch (funct3) {
-	// addi and ecall
+	// addi
 	case 0x0:
 		reg[rd] = reg[rs1] + imm;
 		break;
@@ -322,6 +347,61 @@ void ItypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 	// andi
 	case 0x7:
 		reg[rd] = reg[rs1] & imm;
+		break;
+
+	default:
+		printf("in ItypeSwitch error: case not defined");
+	}
+}
+
+void SBTypeSwitch(uint32_t funtc3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, uint32_t *pc) {
+	switch (funtc3) {
+	// beq
+	case 0x0:
+		if (reg[rs1] == reg[rs2]) {
+			*pc += imm;
+			branch_taken = 1;
+		}
+		break;
+
+	// bne
+	case 0x1:
+		if (reg[rs1] != reg[rs2]) {
+			*pc += imm << 1;
+			branch_taken = 1;
+		}
+		break;
+
+	// blt
+	case 0x4:
+		if (reg[rs1] < reg[rs2]) {
+			*pc += imm << 1;
+			branch_taken = 1;
+		}
+		break;
+
+		// bge
+	case 0x5:
+		if (reg[rs1] >= reg[rs2]) {
+			*pc += imm << 1;
+			branch_taken = 1;
+		}
+		break;
+
+	// bltu
+	case 0x6:
+		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
+			*pc += imm << 1;
+			branch_taken = 1;
+		}
+		break;
+
+	// bgeu
+	case 0x7:
+		if ((uint32_t)reg[rs1] >= (uint32_t)reg[rs2]) {
+			*pc += imm << 1;
+			branch_taken = 1;
+		}
 		break;
 
 	default:
