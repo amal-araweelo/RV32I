@@ -35,7 +35,7 @@
 
 void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg);
 void RTypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, uint32_t rs2, int32_t *reg);
-void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, uint32_t *pc);
+void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc);
 
 // Global variables
 uint8_t branch_taken = 0;
@@ -43,9 +43,9 @@ uint8_t branch_taken = 0;
 /*****************************************************************************************/
 
 int main(int argc, char *argv[]) {
-	uint32_t *progr;
+	uint32_t *progr = NULL;
 	uint32_t num_instructions;
-	uint32_t pc = 0;
+	int32_t pc = 0;
 	int32_t reg[32] = {0};
 
 	//                     Reading binary file into program array
@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	// Open file for reading
-	file = fopen(argv[1], "r");
+	file = fopen(argv[1], "rb");
 
 	// Error handling if fopen() returns NULL pointer
 	if (file == NULL) {
@@ -102,6 +102,7 @@ int main(int argc, char *argv[]) {
 
 	/***************************************************************************************/
 	while (1) {
+
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
 		uint32_t rd = (instr >> 7) & 0x01f;
@@ -126,11 +127,10 @@ int main(int argc, char *argv[]) {
 
 		// SB-type instruction
 		case 0x63:
-			imm = (((instr & 0x80000000) >> 19) | // imm[12]
-			       ((instr & 0x80) << 4) |	      // imm[11]
-			       ((instr & 0x7E000000) >> 20) | // imm[10:5]
-			       ((instr & 0xF00) >> 7))	      // imm[4:1]
-			    ;
+			imm = (((instr >> 31) & 0x1) << 12) | // imm[12]
+			      (((instr >> 7) & 0x1) << 11) |  // imm[11]
+			      (((instr >> 25) & 0x3F) << 5) | // imm[10:5]
+			      (((instr >> 8) & 0xF) << 1);    // imm[4:1]
 
 			// Handle sign extension if needed for 13-bit immediate
 			if (imm & 0x1000) { // If MSB = 1 (negative integer)
@@ -164,6 +164,7 @@ int main(int argc, char *argv[]) {
 		case 0x37: // lui instruction
 			reg[rd] = imm << 12;
 			break;
+
 		case 0x17: // auipc instruction
 			reg[rd] = pc + (imm << 12);
 			break;
@@ -192,16 +193,18 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 
-		pc += 4;
+		// If branch was not taken PC is incremented
+		if (!branch_taken) {
+			pc += 4;
+		}
+		branch_taken = 0;
 
 		for (size_t i = 0; i < sizeof(reg) / sizeof(reg[0]); ++i) {
 			printf("%d ", reg[i]);
 		}
+
 		printf("\n");
 	}
-
-	// TODO: Register dump
-
 	printf("Program exit\n");
 
 	// Free program
@@ -354,57 +357,64 @@ void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 	}
 }
 
-void SBTypeSwitch(uint32_t funtc3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, uint32_t *pc) {
-	switch (funtc3) {
+void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc) {
+
+	switch (funct3) {
 	// beq
 	case 0x0:
+		printf("PC: %d  BEQ: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] == reg[rs2]) {
-			*pc += imm;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
 	// bne
 	case 0x1:
+		printf("PC: %d  BNE: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] != reg[rs2]) {
-			*pc += imm << 1;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
 	// blt
 	case 0x4:
+		printf("PC: %d  BLT: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] < reg[rs2]) {
-			*pc += imm << 1;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
-		// bge
+	// bge
 	case 0x5:
+		printf("PC: %d  BGE: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if (reg[rs1] >= reg[rs2]) {
-			*pc += imm << 1;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
 	// bltu
 	case 0x6:
+		printf("PC: %d  BLTU: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if ((uint32_t)reg[rs1] < (uint32_t)reg[rs2]) {
-			*pc += imm << 1;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
 	// bgeu
 	case 0x7:
+		printf("PC: %d  BGEU: rs1=%d, rs2=%d, imm=%d\n", *pc, reg[rs1], reg[rs2], imm);
 		if ((uint32_t)reg[rs1] >= (uint32_t)reg[rs2]) {
-			*pc += imm << 1;
 			branch_taken = 1;
+			*pc += imm;
 		}
 		break;
 
 	default:
-		printf("in ItypeSwitch error: case not defined");
+		printf("in SBTypeSwitch error: case not defined");
 	}
 }
