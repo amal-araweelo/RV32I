@@ -100,10 +100,13 @@ int main(int argc, char *argv[]) {
 	// Closing file
 	fclose(file);
 
+	int32_t* mem_base = malloc(1048576); //mem base ptr for freeing at the end
+	reg[2] = mem_base;
+
 	/***************************************************************************************/
 	while (1) {
 		// Intializing stack pointer to 1 MiB (mebibyte)
-		reg[2] = malloc(1048576);
+		
 
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
@@ -221,8 +224,9 @@ int main(int argc, char *argv[]) {
 	}
 	printf("Program exit\n");
 
-	// Free program
+	// Free program and allocated memory
 	free(progr);
+	free(mem_base);
 
 	return NO_ERR;
 }
@@ -426,3 +430,6 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 		printf("in SBTypeSwitch error: case not defined");
 	}
 }
+
+
+// 
