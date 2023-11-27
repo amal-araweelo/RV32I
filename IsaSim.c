@@ -194,10 +194,18 @@ int main(int argc, char *argv[]) {
 		}
 		branch_taken = 0;
 
-		for (size_t i = 0; i < sizeof(reg) / sizeof(reg[0]); ++i) {
-			printf("%d ", reg[i]);
+		// Register dump
+		uint8_t k = 0;
+		for (uint8_t j = 0; j < 8; j++) {
+			for (uint8_t i = 0; i < 4; ++i) {
+				printf(" x%d = 0x%X", k, reg[i]);
+				if (k != 31) {
+					printf(", ");
+				}
+				k++;
+			}
+			printf("\n");
 		}
-
 		printf("\n");
 	}
 	printf("Program exit\n");
