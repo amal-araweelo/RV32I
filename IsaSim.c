@@ -119,9 +119,13 @@ int main(int argc, char *argv[]) {
 
 		switch (opcode) {
 
-		// U-type instruction
+			// U-type instruction
 		case AUIPC: // auipc
-		case LUI:   // lui
+			imm = (instr >> 12) << 12;
+			printf("in AUIPC \n");
+			break;
+
+		case LUI: // lui
 			// No need to handle sign-extension since only upper 20 bits are used
 			imm = instr >> 12;
 			break;
@@ -155,12 +159,13 @@ int main(int argc, char *argv[]) {
 		case 0x23:
 			imm = (((instr >> 7) & 0x1F) |	 // imm[4:0]
 			       ((instr >> 20) & 0xFE0)); // imm[11:5]
-			break;
 
 			// Handle sign extension if needed for 21-bit immediate
 			if (imm & 0x800) { // If MSB = 1 (negative integer)
 				imm |= 0xFFFFF000;
 			}
+			break;
+
 		// I-type instructions
 		default:
 			// Handle sign extension if needed for 12-bit immediate
@@ -171,15 +176,14 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		/***********************************************************************************/
-
+		printf("opcode: %x \n", opcode);
 		switch (opcode) {
 
 			/*******************************************************************************/
-			// UJ-type instruction
+			//                           UJ-type instruction
 		case JAL:
 			reg[rd] = pc + 4;
 			pc += imm - 4; // Decrement pc by 4, since we increment later
-			printf("%d \n", imm);
 			break;
 
 			/*******************************************************************************/
@@ -195,7 +199,7 @@ int main(int argc, char *argv[]) {
 			break;
 
 		case ECALL: // ecall
-			EcallSwitch(reg, progr);
+			EcallSwitch(reg, progr, mem_base);
 			break;
 		case I_TYPE:
 			ITypeSwitch(funct3, funct7, rd, rs1, imm, reg);
@@ -215,7 +219,9 @@ int main(int argc, char *argv[]) {
 			break;
 
 		case AUIPC: // auipc instruction
-			reg[rd] = pc + (imm << 12);
+			printf("in AUIPC \n");
+			reg[rd] = pc + imm;
+			printf("reg[rd]: %d \n", reg[rd]);
 			break;
 
 			/*******************************************************************************/
