@@ -308,8 +308,22 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// lhu
 	case 0x05:
-		uint32_t to_load_lhu = (uint16_t)*load_at;
-		reg[rd] = to_load_lhu;
+		printf("hello from lhu \n");
+		uint8_t to_load8_lo = *load_at;
+		uint8_t to_load8_hi = *load_at2;
+		
+		//printf("to load LO: %x HI: %x \n", to_load8_lo, to_load8_hi);
+
+		uint16_t to_load16 = ( (to_load8_hi << 8) |
+							 (to_load8_lo)
+		);
+
+		//printf("loaded tl16 with %x \n", to_load16);
+		uint32_t to_load32 = to_load16; // load unsigned
+		//printf("loaded tl32 with %x \n", to_load32);
+			
+		reg[rd] = to_load32;
+		
 		break;
 
 	default:
