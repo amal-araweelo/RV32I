@@ -8,6 +8,7 @@
 #define AUIPC 0x17
 #define JALR 0x67
 #define ECALL 0x73
+#define JAL 0x6F
 
 // Opcodes - instruction type
 #define I_TYPE 0x13
