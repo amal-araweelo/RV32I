@@ -271,18 +271,20 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
 		     int8_t *mem_base) {
+	printf("Immediate: %x", imm);
 	int8_t *load_at = mem_base + (reg[rs1] + imm);
 	int8_t *load_at1 = mem_base + (reg[rs1] + imm + 1);
 	int8_t *load_at2 = mem_base + (reg[rs1] + imm + 2);
 	int8_t *load_at3 = mem_base + (reg[rs1] + imm + 3);
-
+	printf("Register data: %x\n", reg[rs1]);
 	switch (funct3) {
 	// lb
 	case 0x0:
+		printf("load_at data: %x\n", *load_at);
 		uint8_t to_load_raw8 = (uint8_t)*load_at;
 		int32_t to_load_lb = to_load_raw8; // load unsigned
 
-		if ((to_load_raw8 >> 7) == 1) { // sign extend if needed
+		if (to_load_raw8 >> 7) { // sign extend if needed
 			to_load_lb = to_load_raw8 | 0xFFFFFF00;
 		}
 		reg[rd] = to_load_lb;

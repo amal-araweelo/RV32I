@@ -97,8 +97,8 @@ int main(int argc, char *argv[]) {
 	// Closing file
 	fclose(file);
 
-	int8_t *mem_base = malloc(1048576); // mem base ptr for saving and loading
-	reg[2] = 1048576;
+	int8_t *mem_base = malloc(0x800000); // mem base ptr for saving and loading
+	reg[2] = 0x800000;
 
 	/***************************************************************************************/
 	while (1) {
@@ -146,12 +146,11 @@ int main(int argc, char *argv[]) {
 
 			// UJ-type instructions
 		case JAL:
-			
+
 			imm = (((instr >> 31) & 0x1) << 20) |  // imm[20]
 			      (((instr >> 12) & 0xFF) << 12) | // imm[19:12]
 			      (((instr >> 20) & 0x1) << 11) |  // imm[11]
 			      (((instr >> 21) & 0x3FF) << 1);  // imm[10:1]
-			
 
 			// Handle sign extension if needed for 20-bit immediate
 			if (imm & 0x100000) { // If MSB = 1 (negative integer)
@@ -180,7 +179,7 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		/***********************************************************************************/
-	
+
 		switch (opcode) {
 
 			/*******************************************************************************/
