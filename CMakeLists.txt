@@ -11,4 +11,4 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 file(GLOB SRCS_COMMON src/*.c)
 file(GLOB HDRS src/*.h)
 
-add_executable(isasim IsaSim.c ${SRCS_COMMON} ${HDRS})
+add_executable(isasim IsaSim.c instructions.c globals.c ${SRCS_COMMON} ${HDRS})

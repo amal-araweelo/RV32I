@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
   "CMakeFiles/isasim.dir/IsaSim.c.o"
   "CMakeFiles/isasim.dir/IsaSim.c.o.d"
+  "CMakeFiles/isasim.dir/globals.c.o"
+  "CMakeFiles/isasim.dir/globals.c.o.d"
+  "CMakeFiles/isasim.dir/instructions.c.o"
+  "CMakeFiles/isasim.dir/instructions.c.o.d"
   "CMakeFiles/isasim.dir/src/example.c.o"
   "CMakeFiles/isasim.dir/src/example.c.o.d"
   "isasim"

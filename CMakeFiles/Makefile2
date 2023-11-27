@@ -81,12 +81,12 @@ clean: CMakeFiles/isasim.dir/clean
 CMakeFiles/isasim.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/isasim.dir/build.make CMakeFiles/isasim.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=1,2,3 "Built target isasim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" --progress-num=1,2,3,4,5 "Built target isasim"
 .PHONY : CMakeFiles/isasim.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/isasim.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" 3
+	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/isasim.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles" 0
 .PHONY : CMakeFiles/isasim.dir/rule
