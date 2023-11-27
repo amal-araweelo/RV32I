@@ -254,6 +254,17 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 		break;
 
+	// lh
+	case 0x01:
+		uint16_t to_load_raw = (uint16_t)*load_at;
+		int32_t to_load;
+
+		if ((to_load_raw >> 15) == 1) { // sign extend
+			to_load = to_load_raw | 0xFFFF0000;
+		}
+		reg[rd] = to_load;
+		break;
+
 	// lw
 	case 0x02:
 		reg[rd] = *load_at;
