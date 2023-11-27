@@ -245,9 +245,9 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	// lb
 	case 0x0:
 		uint8_t to_load_raw = (uint8_t)*load_at;
-		int32_t to_load;
+		int32_t to_load = to_load_raw;	// load unsigned
 
-		if ((to_load_raw >> 7) == 1) { // sign extend
+		if ((to_load_raw >> 7) == 1) { 	// sign extend
 			to_load = to_load_raw | 0xFFFFFF00;
 		}
 		reg[rd] = to_load;
@@ -257,9 +257,9 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	// lh
 	case 0x01:
 		uint16_t to_load_raw = (uint16_t)*load_at;
-		int32_t to_load;
+		int32_t to_load = to_load_raw;	// load unsigned
 
-		if ((to_load_raw >> 15) == 1) { // sign extend
+		if ((to_load_raw >> 15) == 1) { // sign extend if needed
 			to_load = to_load_raw | 0xFFFF0000;
 		}
 		reg[rd] = to_load;
@@ -273,7 +273,21 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	default:
 		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
 		break;
+	
+	// lbu
+	case 0x04:
+		uint32_t to_load = (uint8_t)*load_at;
+		reg[rd] = to_load;
+		break;
+	
+	// lhu
+	case: 0x05
+		uint32_t to_load = (uint16_t)*load_at;
+		reg[rd] = to_load;
+		break;
 	}
+
+
 }
 
 // ecall instructions
