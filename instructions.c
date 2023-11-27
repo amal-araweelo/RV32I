@@ -151,7 +151,7 @@ void ITypeSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, in
 	}
 }
 
-// SB-type instructions
+// SB-type instructions format:(sx rs2, imm(rs1))
 void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc) {
 
 	switch (funct3) {
@@ -208,8 +208,7 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	}
 }
 
-void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc,
-		 int8_t *mem_base) {
+void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base) {
 	int8_t *store_at = mem_base + (reg[rs1] + imm);
 	switch (funct3) {
 
@@ -221,7 +220,15 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 		*store_at = to_store;
 		break;
 
-	// sw rs2, imm(rs1)
+	// sh
+	case 0x01:
+		uint32_t to_store_raw = reg[rs2] & 0x00001111; // isolate lower 16 bits
+		int16_t to_store = (int16_t)to_store_raw;	       // typecast to 8bit value
+
+		*store_at = to_store;
+		break;
+
+	// sw 
 	case 0x02:
 		*store_at = reg[rs2];
 		break;
@@ -232,8 +239,7 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 	}
 }
 
-void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
-		     int8_t *mem_base) {
+void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg, int8_t *mem_base) {
 	int8_t *load_at = mem_base + (reg[rs1] + imm);
 	switch (funct3) {
 	// lb
