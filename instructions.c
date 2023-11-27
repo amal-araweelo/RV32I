@@ -227,17 +227,16 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 	// sh
 	case 0x01:
 		printf("hej fra sh \n");
-		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF; // isolate lower 16 bits
-		printf("to_store_raw16 = %x \n", to_store_raw16);
-		int16_t to_store16 = (int16_t)to_store_raw16; // typecast to 16bit value
-		int8_t to_store16high = to_store_raw16 >> 8;
+		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF;	       // isolate lower 16 bits
+		uint8_t to_store16low = (uint8_t)((to_store_raw16 << 8) >> 8); // isolate lower 8 bits
+		uint8_t to_store16high = (uint8_t)(to_store_raw16 >> 8);       // isolate upper 8 bits
 
-		*store_at = to_store16;
-		int8_t *store_high = store_at++;
-		*store_high = to_store16high;
-		printf("to_store16 = %x in store_at = %p \n", to_store16, store_at);
+		*store_at = to_store16low;
 		uint32_t storedval = *store_at;
-		printf("stored %x at %p", storedval, store_at);
+		uint8_t *store_high = store_at++;
+		*store_high = to_store16high;
+		printf("LOW : to_store16 = %x in store_at = %p \n", to_store16low, store_at);
+		printf("HIGH: to_store16 = %x in store_at = %p \n", to_store16high, store_high);
 		break;
 
 	// sw
@@ -270,11 +269,18 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// lh
 	case 0x01:
-		uint32_t valtoload = *load_at;
-		printf("trying to load %x from %p \n", valtoload, load_at);
+		// uint32_t valtoload = *load_at;
 		uint16_t to_load_raw16 = (uint16_t)*load_at;
-		printf("loaded %x \n", to_load_raw16);
-		uint32_t to_load_lh = to_load_raw16; // load unsigned
+		// uint32_t to_load_lh = to_load_raw16; // load unsigned
+		// min tilføjelse
+		uint8_t to_load_8high = *(load_at);
+		printf("HIGH: address: %p \n", load_at);
+		printf("LOW: address: %p \n", load_at);
+		uint8_t to_load_8low = *(++load_at);
+		printf("LOAD LOW: %x\n from %p \n", to_load_8low, load_at);
+		printf("LOAD HIGH: %x from %p \n", to_load_8high, load_at--);
+		uint16_t to_load_lh = (((uint16_t)to_load_8low)) & (((uint16_t)to_load_8high));
+		printf("HHHH: to_load_lh %x from %p \n", to_load_lh, load_at);
 
 		if ((to_load_raw16 >> 15) == 1) { // sign extend if needed
 			to_load_lh = to_load_raw16 | 0xFFFF0000;
