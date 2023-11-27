@@ -37,9 +37,6 @@
 
 // Function prototypes
 
-
-
-
 /*****************************************************************************************/
 
 int main(int argc, char *argv[]) {
@@ -100,7 +97,6 @@ int main(int argc, char *argv[]) {
 	// Closing file
 	fclose(file);
 
-
 	int8_t *mem_base = malloc(1048576); // mem base ptr for saving and loading
 	reg[2] = 1048576;
 
@@ -143,6 +139,19 @@ int main(int argc, char *argv[]) {
 			}
 			break;
 
+			// UJ-type instructions
+		case JAL:
+			imm = (((instr >> 31) & 0x1) << 20) |  // imm[20]
+			      (((instr >> 12) & 0xFF) << 12) | // imm[19:12]
+			      (((instr >> 20) & 0x1) << 11) |  // imm[11]
+			      (((instr >> 21) & 0x3FF) << 1);  // imm[10:1]
+
+			// Handle sign extension if needed for 21-bit immediate
+			if (imm & 0x100000) { // If MSB = 1 (negative integer)
+				imm |= 0xFFE00000;
+			}
+			break;
+
 		// I-type instructions
 		default:
 			// Handle sign extension if needed for 12-bit immediate
@@ -157,12 +166,18 @@ int main(int argc, char *argv[]) {
 		switch (opcode) {
 
 			/*******************************************************************************/
+			// UJ-type instruction
+		case JAL:
+
+			break;
+
+			/*******************************************************************************/
 			//                           I-type instructions
 
 		case 0x03: // Loads
 			ITypeLoadSwitch(funct3, funct7, rd, rs1, imm, reg, mem_base);
 			break;
-		
+
 		case JALR: // jalr
 			reg[rd] = pc + 4;
 			pc = reg[rs1] + imm;
@@ -238,8 +253,4 @@ int main(int argc, char *argv[]) {
 	return NO_ERR;
 }
 
-
-
-
-
-// 
+//
