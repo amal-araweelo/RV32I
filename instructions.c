@@ -209,7 +209,7 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 }
 
 void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base){
-	uint32_t* store_at = mem_base+(reg[rs1]+imm);
+	int8_t* store_at = mem_base+(reg[rs1]+imm);
 	switch(funct3){
 		
 		//sb
@@ -233,7 +233,7 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 }
 
 void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg, int8_t* mem_base){
-	uint32_t* load_at = mem_base+(reg[rs1]+imm);
+	int8_t* load_at = mem_base+(reg[rs1]+imm);
 	switch(funct3){
 		//lb
 		case 0x0:
