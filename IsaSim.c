@@ -116,7 +116,8 @@ int main(int argc, char *argv[]) {
 		//                     Immediate extraction based on opcode
 
 		int32_t imm;
-
+		printf("instr: %x \n", instr);
+		printf("opcode: %x \n", opcode);
 		switch (opcode) {
 
 			// U-type instruction
@@ -145,15 +146,18 @@ int main(int argc, char *argv[]) {
 
 			// UJ-type instructions
 		case JAL:
+			
 			imm = (((instr >> 31) & 0x1) << 20) |  // imm[20]
 			      (((instr >> 12) & 0xFF) << 12) | // imm[19:12]
 			      (((instr >> 20) & 0x1) << 11) |  // imm[11]
 			      (((instr >> 21) & 0x3FF) << 1);  // imm[10:1]
+			
 
-			// Handle sign extension if needed for 21-bit immediate
+			// Handle sign extension if needed for 20-bit immediate
 			if (imm & 0x100000) { // If MSB = 1 (negative integer)
-				imm |= 0xFDE00000;
+				imm |= 0xFFE00000;
 			}
+			printf("JAL imm made: %x \n", imm);
 			break;
 		// S-type instructions
 		case 0x23:
@@ -176,12 +180,14 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 		/***********************************************************************************/
-		printf("opcode: %x \n", opcode);
+	
 		switch (opcode) {
 
 			/*******************************************************************************/
 			//                           UJ-type instruction
 		case JAL:
+			printf("hello from JAL\n");
+			printf("JAL received imm: %x \n", imm);
 			reg[rd] = pc + 4;
 			pc += imm - 4; // Decrement pc by 4, since we increment later
 			break;
@@ -260,6 +266,8 @@ int main(int argc, char *argv[]) {
 			printf("\n");
 		}
 		printf("\n");
+
+		reg[0] = 0;
 	}
 	printf("Program exit\n");
 
