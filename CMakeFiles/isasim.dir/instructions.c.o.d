@@ -1,7 +1,6 @@
-CMakeFiles/isasim.dir/IsaSim.c.o: \
- /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/IsaSim.c \
+CMakeFiles/isasim.dir/instructions.c.o: \
+ /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/instructions.c \
  /usr/include/stdc-predef.h \
- /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/globals.h \
  /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/instructions.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
@@ -18,7 +17,7 @@ CMakeFiles/isasim.dir/IsaSim.c.o: \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
  /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h \
- /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/opcodes.h \
+ /mnt/c/Users/amaln/OneDrive\ -\ Danmarks\ Tekniske\ Universitet/3.\ Semester/Computerarkitektur/Final/globals.h \
  /usr/include/stdio.h /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h \

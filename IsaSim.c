@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
 	/***************************************************************************************/
 	while (1) {
 		// Intializing stack pointer to 1 MiB (mebibyte)
-
+		printf("PC = %x \n", pc);
 		uint32_t instr = progr[pc >> 2];
 		uint32_t opcode = instr & 0x7f;
 		uint32_t rd = (instr >> 7) & 0x01f;
@@ -169,7 +169,8 @@ int main(int argc, char *argv[]) {
 			// UJ-type instruction
 		case JAL:
 			reg[rd] = pc + 4;
-			pc += imm;
+			pc += imm - 4; // Decrement pc by 4, since we increment later
+			printf("%d \n", imm);
 			break;
 
 			/*******************************************************************************/
@@ -181,7 +182,7 @@ int main(int argc, char *argv[]) {
 
 		case JALR: // jalr
 			reg[rd] = pc + 4;
-			pc = reg[rs1] + imm;
+			pc = reg[rs1] + imm - 4;
 			break;
 
 		case ECALL: // ecall

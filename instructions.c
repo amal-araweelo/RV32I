@@ -216,18 +216,18 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 	// sb
 	case 0x0:
-		to_store_raw = reg[rs2] & 0x00000011;	// isolate lower 8 bits
-		int8_t to_store = (int8_t)to_store_raw; // typecast to 8bit value
+		to_store_raw = reg[rs2] & 0x00000011;	 // isolate lower 8 bits
+		int8_t to_store8 = (int8_t)to_store_raw; // typecast to 8bit value
 
-		*store_at = to_store;
+		*store_at = to_store8;
 		break;
 
 	// sh
 	case 0x01:
-		to_store_raw = reg[rs2] & 0x00001111;	  // isolate lower 16 bits
-		int16_t to_store = (int16_t)to_store_raw; // typecast to 8bit value
+		to_store_raw = reg[rs2] & 0x00001111;	    // isolate lower 16 bits
+		int16_t to_store16 = (int16_t)to_store_raw; // typecast to 8bit value
 
-		*store_at = to_store;
+		*store_at = to_store16;
 		break;
 
 	// sw
@@ -249,24 +249,24 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	// lb
 	case 0x0:
 		uint8_t to_load_raw8 = (uint8_t)*load_at;
-		int32_t to_load = to_load_raw8; // load unsigned
+		int32_t to_load_lb = to_load_raw8; // load unsigned
 
 		if ((to_load_raw8 >> 7) == 1) { // sign extend if needed
-			to_load = to_load_raw8 | 0xFFFFFF00;
+			to_load_lb = to_load_raw8 | 0xFFFFFF00;
 		}
-		reg[rd] = to_load;
+		reg[rd] = to_load_lb;
 
 		break;
 
 	// lh
 	case 0x01:
 		uint16_t to_load_raw16 = (uint16_t)*load_at;
-		int32_t to_load = to_load_raw16; // load unsigned
+		uint32_t to_load_lh = to_load_raw16; // load unsigned
 
 		if ((to_load_raw16 >> 15) == 1) { // sign extend if needed
-			to_load = to_load_raw16 | 0xFFFF0000;
+			to_load_lh = to_load_raw16 | 0xFFFF0000;
 		}
-		reg[rd] = to_load;
+		reg[rd] = to_load_lh;
 		break;
 
 	// lw
@@ -276,14 +276,14 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// lbu
 	case 0x04:
-		uint32_t to_load = (uint8_t)*load_at;
-		reg[rd] = to_load;
+		uint32_t to_load_lbu = (uint8_t)*load_at;
+		reg[rd] = to_load_lbu;
 		break;
 
 	// lhu
 	case 0x05:
-		uint32_t to_load = (uint16_t)*load_at;
-		reg[rd] = to_load;
+		uint32_t to_load_lhu = (uint16_t)*load_at;
+		reg[rd] = to_load_lhu;
 		break;
 
 	default:
