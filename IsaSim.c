@@ -151,7 +151,16 @@ int main(int argc, char *argv[]) {
 				imm |= 0xFDE00000;
 			}
 			break;
+		// S-type instructions
+		case 0x23:
+			imm = (((instr >> 7) & 0x1F) |	 // imm[4:0]
+			       ((instr >> 20) & 0xFE0)); // imm[11:5]
+			break;
 
+			// Handle sign extension if needed for 21-bit immediate
+			if (imm & 0x800) { // If MSB = 1 (negative integer)
+				imm |= 0xFFFFF000;
+			}
 		// I-type instructions
 		default:
 			// Handle sign extension if needed for 12-bit immediate
@@ -220,7 +229,7 @@ int main(int argc, char *argv[]) {
 			//                            S-type instruction
 		case 0x23:
 			STypeSwitch(funct3, rs1, rs2, imm, reg, &pc, mem_base);
-
+			break;
 		default:
 			printf("Opcode %u not yet implemented\n", opcode);
 			break;
