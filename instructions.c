@@ -208,55 +208,54 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	}
 }
 
-void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base){
-	int8_t* store_at = mem_base+(reg[rs1]+imm);
-	switch(funct3){
-		
-		//sb
-		case 0x0:
-			uint32_t to_store_raw = reg[rs2] & 0x00000011; //isolate lower 8 bits
-			int8_t to_store = (int8_t)to_store_raw; //typecast to 8bit value
-			
-			*store_at = to_store;
-			break;
+void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc,
+		 int8_t *mem_base) {
+	int8_t *store_at = mem_base + (reg[rs1] + imm);
+	switch (funct3) {
 
-		//sw rs2, imm(rs1)
-		case 0x02:
-			*store_at = reg[rs2];
-			break;
+	// sb
+	case 0x0:
+		uint32_t to_store_raw = reg[rs2] & 0x00000011; // isolate lower 8 bits
+		int8_t to_store = (int8_t)to_store_raw;	       // typecast to 8bit value
 
-		default:
-		printf("in STypeSwitch (funct3) error: case %d not defined", funct3);
+		*store_at = to_store;
 		break;
 
+	// sw rs2, imm(rs1)
+	case 0x02:
+		*store_at = reg[rs2];
+		break;
+
+	default:
+		printf("in STypeSwitch (funct3) error: case %d not defined", funct3);
+		break;
 	}
 }
 
-void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg, int8_t* mem_base){
-	int8_t* load_at = mem_base+(reg[rs1]+imm);
-	switch(funct3){
-		//lb
-		case 0x0:
-			uint8_t to_load_raw = (uint8_t)*load_at;
-			int32_t to_load;
-			
-			if ((to_load_raw >> 7) == 1){				//sign extend
-				to_load = to_load_raw | 0xFFFFFF00;
-			}
-			reg[rd] = to_load;
-			
-			break;
-			
+void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
+		     int8_t *mem_base) {
+	int8_t *load_at = mem_base + (reg[rs1] + imm);
+	switch (funct3) {
+	// lb
+	case 0x0:
+		uint8_t to_load_raw = (uint8_t)*load_at;
+		int32_t to_load;
 
-		//lw
-		case 0x02:
-			reg[rd] = *load_at;
-			break;
+		if ((to_load_raw >> 7) == 1) { // sign extend
+			to_load = to_load_raw | 0xFFFFFF00;
+		}
+		reg[rd] = to_load;
 
-		default:
-		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
 		break;
 
+	// lw
+	case 0x02:
+		reg[rd] = *load_at;
+		break;
+
+	default:
+		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
+		break;
 	}
 }
 
