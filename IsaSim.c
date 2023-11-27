@@ -245,7 +245,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 		//lb
 		case 0x0:
 			uint8_t to_load_raw = (uint8_t)*load_at;
-			uint32_t to_load;
+			int32_t to_load;
 			/* LEGACY CODE
 			uint32_t byte_offset = (reg[rs1]+imm) % 4;
 			uint32_t load_mask;
@@ -270,7 +270,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 			if ((to_load >> 7) == 1){
 			*/
 			if ((to_load_raw >> 7) == 1){				//sign extend
-				to_load = to_load_raw | 0x11111100;
+				to_load = to_load_raw | 0xFFFFFF00;
 			}
 			reg[rd] = to_load;
 			
@@ -292,11 +292,12 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int32_t *mem_base){
 	switch(funct3){
+		uint32_t* store_at = mem_base+(reg[rs1]+imm);
 		//sb
 		case 0x0:
 			uint32_t to_store_raw = reg[rs2] & 0x00000011; //isolate lower 8 bits
-			uint8_t to_store = (uint8_t)to_store_raw; //typecast to 8bit value
-			uint32_t* store_at = mem_base+(reg[rs1]+imm);
+			int8_t to_store = (int8_t)to_store_raw; //typecast to 8bit value
+			
 			
 			/* LEGACY CODE
 			uint32_t byte_offset = reg[rs1]+imm % 4;
@@ -329,7 +330,6 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 		//sw rs2, imm(rs1)
 		case 0x02:
-			uint32_t* store_at = mem_base+(reg[rs1]+imm);
 			*store_at = reg[rs2];
 			break;
 
