@@ -99,9 +99,18 @@ int main(int argc, char *argv[]) {
 
 	int8_t *mem_base = malloc(0x800000); // mem base ptr for saving and loading
 	reg[2] = 0x800000;
+	printf("MEM: %p \n", mem_base);
+
+	for (int i = 0; i < num_instructions; ++i) {
+		mem_base[i * 4] = (progr[i] >> 24) & 0xFF;
+		mem_base[i * 4 + 1] = (progr[i] >> 16) & 0xFF;
+		mem_base[i * 4 + 2] = (progr[i] >> 8) & 0xFF;
+		mem_base[i * 4 + 3] = (progr[i]) & 0xFF;
+	}
 
 	/***************************************************************************************/
 	while (1) {
+
 		// Intializing stack pointer to 1 MiB (mebibyte)
 		printf("PC = %x \n", pc);
 		uint32_t instr = progr[pc >> 2];

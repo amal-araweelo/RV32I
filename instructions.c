@@ -230,8 +230,6 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 	// sh
 	case 0x01:
-		printf("hej fra sh \n");
-
 		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF; // isolate lower 16 bits
 		printf("to_store_raw16 = %x \n", to_store_raw16);
 		*store_at = (uint8_t)(to_store_raw16 & 0x00FF);
@@ -271,16 +269,15 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
 		     int8_t *mem_base) {
-	printf("Immediate: %x", imm);
-	int8_t *load_at = mem_base + (reg[rs1] + imm);
+	printf("MEM: %p \n", mem_base);
+	int8_t *load_at = mem_base + (reg[rs1]);
 	int8_t *load_at1 = mem_base + (reg[rs1] + imm + 1);
 	int8_t *load_at2 = mem_base + (reg[rs1] + imm + 2);
 	int8_t *load_at3 = mem_base + (reg[rs1] + imm + 3);
-	printf("Register data: %x\n", reg[rs1]);
+
 	switch (funct3) {
 	// lb
 	case 0x0:
-		printf("load_at data: %x\n", *load_at);
 		uint8_t to_load_raw8 = (uint8_t)*load_at;
 		int32_t to_load_lb = to_load_raw8; // load unsigned
 
@@ -356,7 +353,6 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 // ecall instructions
 void EcallSwitch(int32_t *reg, uint32_t *progr, int8_t *mem_base) {
-	reg[0] = 0;
 	// exit
 	if (reg[17] == 10) {
 		printf("Program exit\n");
