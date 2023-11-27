@@ -208,6 +208,106 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	}
 }
 
+void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int32_t *mem_base){
+	switch(funct3){
+		uint32_t* store_at = mem_base+(reg[rs1]+imm);
+		//sb
+		case 0x0:
+			uint32_t to_store_raw = reg[rs2] & 0x00000011; //isolate lower 8 bits
+			int8_t to_store = (int8_t)to_store_raw; //typecast to 8bit value
+			
+			
+			/* LEGACY CODE
+			uint32_t byte_offset = reg[rs1]+imm % 4;
+			uint32_t store_mask;	
+			
+			// calculate where in word to place byte
+			if (byte_offset != 0){
+				if (byte_offset == 1){
+					store_mask = 0x11110011;
+					to_store = to_store << 8;
+				}
+				else if (byte_offset == 2){
+					store_mask = 0x11001111;
+					to_store = to_store << 16;
+				}
+				else{
+					store_mask = 0x00111111;
+					to_store = to_store << 24;
+				}
+			}
+			else {
+				store_mask = 0x11111100;
+			}
+
+			// store byte
+			*store_at = *store_at & store_mask; //Clear the section in which to store byte
+			*store_at = *store_at & to_store;	//Store the byte, preserving the rest of the word */
+			*store_at = to_store;
+			break;
+
+		//sw rs2, imm(rs1)
+		case 0x02:
+			*store_at = reg[rs2];
+			break;
+
+		default:
+		printf("in STypeSwitch (funct3) error: case %d not defined", funct3);
+		break;
+
+	}
+}
+
+void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg, int32_t* mem_base){
+	uint32_t* load_at = mem_base+(reg[rs1]+imm);
+	switch(funct3){
+		//lb
+		case 0x0:
+			uint8_t to_load_raw = (uint8_t)*load_at;
+			int32_t to_load;
+			/* LEGACY CODE
+			uint32_t byte_offset = (reg[rs1]+imm) % 4;
+			uint32_t load_mask;
+			//Calculate which byte to load
+			if (byte_offset != 0){
+				if (byte_offset == 1){
+					load_mask = 0x11110011;
+				}
+				else if (byte_offset == 2){
+					load_mask = 0x11001111;
+				}
+				else{
+					load_mask = 0x00111111;
+				}
+			}
+			else {
+				load_mask = 0x11111100;
+			}	
+
+			to_load = (*load_at & load_mask) >> byte_offset;
+
+			if ((to_load >> 7) == 1){
+			*/
+			if ((to_load_raw >> 7) == 1){				//sign extend
+				to_load = to_load_raw | 0xFFFFFF00;
+			}
+			reg[rd] = to_load;
+			
+			break;
+			
+
+		//lw
+		case 0x02:
+			reg[rd] = *load_at;
+			break;
+
+		default:
+		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
+		break;
+
+	}
+}
+
 // ecall instructions
 void EcallSwitch(int32_t *reg, uint32_t *progr) {
 	// exit
