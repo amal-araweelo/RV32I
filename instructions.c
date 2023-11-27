@@ -356,6 +356,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 // ecall instructions
 void EcallSwitch(int32_t *reg, uint32_t *progr, int8_t *mem_base) {
+	reg[0] = 0;
 	// exit
 	if (reg[17] == 10) {
 		printf("Program exit\n");
