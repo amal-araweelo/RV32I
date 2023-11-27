@@ -208,28 +208,29 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	}
 }
 
-void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base) {
+void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc,
+		 int8_t *mem_base) {
 	int8_t *store_at = mem_base + (reg[rs1] + imm);
 	uint32_t to_store_raw;
 	switch (funct3) {
 
 	// sb
 	case 0x0:
-		to_store_raw = reg[rs2] & 0x00000011; // isolate lower 8 bits
-		int8_t to_store = (int8_t)to_store_raw;	       // typecast to 8bit value
+		to_store_raw = reg[rs2] & 0x00000011;	// isolate lower 8 bits
+		int8_t to_store = (int8_t)to_store_raw; // typecast to 8bit value
 
 		*store_at = to_store;
 		break;
 
 	// sh
 	case 0x01:
-		to_store_raw = reg[rs2] & 0x00001111; // isolate lower 16 bits
-		int16_t to_store = (int16_t)to_store_raw;	       // typecast to 8bit value
+		to_store_raw = reg[rs2] & 0x00001111;	  // isolate lower 16 bits
+		int16_t to_store = (int16_t)to_store_raw; // typecast to 8bit value
 
 		*store_at = to_store;
 		break;
 
-	// sw 
+	// sw
 	case 0x02:
 		*store_at = reg[rs2];
 		break;
@@ -240,15 +241,16 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 	}
 }
 
-void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg, int8_t *mem_base) {
+void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
+		     int8_t *mem_base) {
 	int8_t *load_at = mem_base + (reg[rs1] + imm);
 	switch (funct3) {
 	// lb
 	case 0x0:
 		uint8_t to_load_raw = (uint8_t)*load_at;
-		int32_t to_load = to_load_raw;	// load unsigned
+		int32_t to_load = to_load_raw; // load unsigned
 
-		if ((to_load_raw >> 7) == 1) { 	// sign extend if needed
+		if ((to_load_raw >> 7) == 1) { // sign extend if needed
 			to_load = to_load_raw | 0xFFFFFF00;
 		}
 		reg[rd] = to_load;
@@ -258,7 +260,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	// lh
 	case 0x01:
 		uint16_t to_load_raw = (uint16_t)*load_at;
-		int32_t to_load = to_load_raw;	// load unsigned
+		int32_t to_load = to_load_raw; // load unsigned
 
 		if ((to_load_raw >> 15) == 1) { // sign extend if needed
 			to_load = to_load_raw | 0xFFFF0000;
@@ -270,13 +272,13 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	case 0x02:
 		reg[rd] = *load_at;
 		break;
-	
+
 	// lbu
 	case 0x04:
 		uint32_t to_load = (uint8_t)*load_at;
 		reg[rd] = to_load;
 		break;
-	
+
 	// lhu
 	case 0x05:
 		uint32_t to_load = (uint16_t)*load_at;
@@ -286,12 +288,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	default:
 		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
 		break;
-	
 	}
-
-	
-
-
 }
 
 // ecall instructions
