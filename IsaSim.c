@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 
 			// Handle sign extension if needed for 21-bit immediate
 			if (imm & 0x100000) { // If MSB = 1 (negative integer)
-				imm |= 0xFFE00000;
+				imm |= 0xFDE00000;
 			}
 			break;
 
@@ -168,7 +168,8 @@ int main(int argc, char *argv[]) {
 			/*******************************************************************************/
 			// UJ-type instruction
 		case JAL:
-
+			reg[rd] = pc + 4;
+			pc += imm;
 			break;
 
 			/*******************************************************************************/
