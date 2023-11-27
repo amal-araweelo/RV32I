@@ -198,7 +198,7 @@ int main(int argc, char *argv[]) {
 		uint8_t k = 0;
 		for (uint8_t j = 0; j < 8; j++) {
 			for (uint8_t i = 0; i < 4; ++i) {
-				printf(" x%d = 0x%X", k, reg[i]);
+				printf(" x%d = 0x%X", k, reg[k]);
 				if (k != 31) {
 					printf(", ");
 				}
