@@ -211,15 +211,14 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc,
 		 int8_t *mem_base) {
 	int8_t *store_at = mem_base + (reg[rs1] + imm);
-	uint32_t to_store_raw;
 	switch (funct3) {
 
 	// sb
 	case 0x0:
 		printf("hej fra sb \n");
-		to_store_raw = reg[rs2] & 0x000000FF; // isolate lower 8 bits
-		printf("to_store_raw = %x \n", to_store_raw);
-		int8_t to_store8 = (int8_t)to_store_raw; // typecast to 8bit value
+		uint8_t to_store_raw8 = reg[rs2] & 0x000000FF; // isolate lower 8 bits
+		printf("to_store_raw = %x \n", to_store_raw8);
+		int8_t to_store8 = (int8_t)to_store_raw8; // typecast to 8bit value
 
 		*store_at = to_store8;
 		printf("to_store8 = %d in store_at = %p \n", to_store8, store_at);
@@ -227,10 +226,18 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 	// sh
 	case 0x01:
-		to_store_raw = reg[rs2] & 0x0000FFFF;	    // isolate lower 16 bits
-		int16_t to_store16 = (int16_t)to_store_raw; // typecast to 8bit value
+		printf("hej fra sh \n");
+		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF; // isolate lower 16 bits
+		printf("to_store_raw16 = %x \n", to_store_raw16);
+		int16_t to_store16 = (int16_t)to_store_raw16; // typecast to 16bit value
+		int8_t to_store16high = to_store_raw16 >> 8;
 
 		*store_at = to_store16;
+		int8_t *store_high = store_at++;
+		*store_high = to_store16high;
+		printf("to_store16 = %x in store_at = %p \n", to_store16, store_at);
+		uint32_t storedval = *store_at;
+		printf("stored %x at %p", storedval, store_at);
 		break;
 
 	// sw
@@ -263,7 +270,10 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// lh
 	case 0x01:
+		uint32_t valtoload = *load_at;
+		printf("trying to load %x from %p \n", valtoload, load_at);
 		uint16_t to_load_raw16 = (uint16_t)*load_at;
+		printf("loaded %x \n", to_load_raw16);
 		uint32_t to_load_lh = to_load_raw16; // load unsigned
 
 		if ((to_load_raw16 >> 15) == 1) { // sign extend if needed
