@@ -210,11 +210,12 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 
 void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base) {
 	int8_t *store_at = mem_base + (reg[rs1] + imm);
+	uint32_t to_store_raw;
 	switch (funct3) {
 
 	// sb
 	case 0x0:
-		uint32_t to_store_raw = reg[rs2] & 0x00000011; // isolate lower 8 bits
+		to_store_raw = reg[rs2] & 0x00000011; // isolate lower 8 bits
 		int8_t to_store = (int8_t)to_store_raw;	       // typecast to 8bit value
 
 		*store_at = to_store;
@@ -222,7 +223,7 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 	// sh
 	case 0x01:
-		uint32_t to_store_raw = reg[rs2] & 0x00001111; // isolate lower 16 bits
+		to_store_raw = reg[rs2] & 0x00001111; // isolate lower 16 bits
 		int16_t to_store = (int16_t)to_store_raw;	       // typecast to 8bit value
 
 		*store_at = to_store;
@@ -277,15 +278,18 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 		break;
 	
 	// lhu
-	case: 0x05
+	case 0x05:
 		uint32_t to_load = (uint16_t)*load_at;
 		reg[rd] = to_load;
 		break;
-	}
 
 	default:
 		printf("in ITypeLoadSwitch (funct3) error: case %d not defined", funct3);
 		break;
+	
+	}
+
+	
 
 
 }
