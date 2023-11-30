@@ -270,7 +270,7 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1, int32_t imm, int32_t *reg,
 		     int8_t *mem_base) {
 	printf("MEM: %p \n", mem_base);
-	int8_t *load_at = mem_base + (reg[rs1]);
+	int8_t *load_at = mem_base + (reg[rs1] + imm);
 	int8_t *load_at1 = mem_base + (reg[rs1] + imm + 1);
 	int8_t *load_at2 = mem_base + (reg[rs1] + imm + 2);
 	int8_t *load_at3 = mem_base + (reg[rs1] + imm + 3);
