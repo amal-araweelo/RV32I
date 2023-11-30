@@ -14,5 +14,9 @@
 #define I_TYPE 0x13
 #define R_TYPE 0x33
 #define SB_TYPE 0x63
+#define S_TYPE 0x23
+
+// Opcode - instruction subset
+#define LOADS 0x03
 
 #endif // OPCODE_H
