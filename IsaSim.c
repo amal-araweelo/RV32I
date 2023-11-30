@@ -102,10 +102,10 @@ int main(int argc, char *argv[]) {
 	printf("MEM: %p \n", mem_base);
 
 	for (int i = 0; i < num_instructions; ++i) {
-		mem_base[i * 4 + 3] = (progr[i] >> 24) & 0xFF;
+		mem_base[i * 4] = (progr[i]) & 0xFF;
 		mem_base[i * 4 + 1] = (progr[i] >> 8) & 0xFF;
 		mem_base[i * 4 + 2] = (progr[i] >> 16) & 0xFF;
-		mem_base[i * 4] = (progr[i]) & 0xFF;
+		mem_base[i * 4 + 3] = (progr[i] >> 24) & 0xFF;
 	}
 
 	/***************************************************************************************/
