@@ -208,8 +208,8 @@ void SBTypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int3
 	}
 }
 
-void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc,
-		 int8_t *mem_base) {
+void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32_t *reg, int32_t *pc, int8_t *mem_base) {
+	//Create variables to represent memory locations
 	int8_t *store_at = mem_base + (reg[rs1] + imm);
 	int8_t *store_at1 = mem_base + (reg[rs1] + imm + 1);
 	int8_t *store_at2 = mem_base + (reg[rs1] + imm + 2);
@@ -217,50 +217,28 @@ void STypeSwitch(uint32_t funct3, uint32_t rs1, uint32_t rs2, int32_t imm, int32
 
 	switch (funct3) {
 
-	// sb
+	// SB: Store Byte
 	case 0x0:
-		printf("hej fra sb \n");
-		uint8_t to_store_raw8 = reg[rs2] & 0x000000FF; // isolate lower 8 bits
-		printf("to_store_raw = %x \n", to_store_raw8);
-		int8_t to_store8 = (int8_t)to_store_raw8; // typecast to 8bit value
-
-		*store_at = to_store8;
-		printf("to_store8 = %d in store_at = %p \n", to_store8, store_at);
+		uint8_t to_store_raw8 = reg[rs2] & 0x000000FF; 	// isolate lower 8 bits
+		*store_at = (int8_t)to_store_raw8; 		// typecast to 8bit value, and place in memory
 		break;
 
-	// sh
+	// SH: Store Half
 	case 0x01:
-		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF; // isolate lower 16 bits
-		printf("to_store_raw16 = %x \n", to_store_raw16);
-		*store_at = (uint8_t)(to_store_raw16 & 0x00FF);
-		*store_at1 = (uint8_t)(to_store_raw16 >> 8);
-
-		//	CHECKS
-		// uint16_t storedval_lo = *store_at;
-		// uint16_t storedval_hi = *store_at1;
-		// printf("stored %x at %p and -  %x at %p ", storedval_lo, store_at, storedval_hi, store_at2);
-
+		uint16_t to_store_raw16 = reg[rs2] & 0x0000FFFF; 	// isolate lower 16 bits
+		*store_at = (uint8_t)(to_store_raw16 & 0x00FF);		// typecast lower 8 bits and store
+		*store_at1 = (uint8_t)(to_store_raw16 >> 8);		
 		break;
 
-	// sw
+	// SW: Store Word
 	case 0x02:
-		// printf("hej fra sw \n");
-
-		// printf("to_store_raw16 = %x \n", to_store_raw16);
 		*store_at = (uint8_t)(reg[rs2] & 0x000000FF);
 		*store_at1 = (uint8_t)((reg[rs2] >> 8) & 0x000000FF);
 		*store_at2 = (uint8_t)((reg[rs2] >> 16) & 0x000000FF);
 		*store_at3 = (uint8_t)((reg[rs2] >> 24) & 0x000000FF);
-
-		// CHECKS
-		// uint16_t storedval_0 = *store_at;
-		// uint16_t storedval_1 = *store_at1;
-		// uint16_t storedval_2 = *store_at2;
-		// uint16_t storedval_3 = *store_at3;
-		// printf("stored: \n %x at %p \n %x at %p \n %x at %p \n %x at %p ", storedval_0, store_at,
-		// storedval_1, store_at1, storedval_2, store_at2, storedval_3, store_at3);
 		break;
 
+	//Error handling
 	default:
 		printf("in STypeSwitch (funct3) error: case %d not defined", funct3);
 		break;
