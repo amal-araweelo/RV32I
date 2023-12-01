@@ -9,7 +9,7 @@ The code for this project is split into multiple source files and headers.
 * <b> instructions.c</b> and <b>instructions.h</b>  contain switches for the different instruction types, as well as the function to dump the register contents.
 * <b> IsaSim.c is </b> the main file, containing the main features of the simulator
 
- Create and navigate to a build folder in the Ubuntu terminal by running the following:
+ Navigate to the project folder. Then create and navigate to a build folder in the Ubuntu terminal by running the following:
 ```
 mkdir build
 cd build
