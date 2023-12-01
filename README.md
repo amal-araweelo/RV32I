@@ -6,8 +6,8 @@
 File structure and running the program
 The code for this project is split into multiple source files and headers.
 
-<b>opcodes.h</b> contains definitions for opcodes for different instruction types
-globals.c and globals.h contain definitions of global variables
+* <b>opcodes.h</b> contains definitions for opcodes for different instruction types
+* globals.c and globals.h contain definitions of global variables
     instructions.c and instructions.h contain switches for the different instruction types, as well as the function to dump the register contents.
     isasim.c is the main file, containing the main features of the simulator.
 
