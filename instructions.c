@@ -257,7 +257,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 		uint8_t to_load8_hi = *load_at1;
 		uint16_t to_load16 = ((to_load8_hi << 8) | (to_load8_lo));
 		uint32_t to_load32lh = to_load16; // load unsigned
-		if ((to_load16 >> 15) == 1) { // sign extend if needed
+		if ((to_load16 >> 15) == 1) {	  // sign extend if needed
 			to_load32lh = to_load32lh | 0xFFFF0000;
 		}
 		reg[rd] = to_load32lh;
@@ -265,7 +265,6 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LW: Load Word
 	case 0x02:
-			// printf("hello from lw \n");
 		uint8_t to_load8_0 = *load_at;
 		uint8_t to_load8_1 = *load_at1;
 		uint8_t to_load8_2 = *load_at2;
@@ -286,7 +285,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 		uint8_t to_load8_1lhu = *load_at;
 		uint8_t to_load8_2lhu = *load_at1;
 		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));
-		uint32_t to_load32lhu = to_load16lhu; 	// load into 32bit val
+		uint32_t to_load32lhu = to_load16lhu; // load into 32bit val
 		reg[rd] = to_load32lhu;
 		break;
 
