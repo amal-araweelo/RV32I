@@ -1,6 +1,5 @@
 build/*
 .clang-format
-Makefile
 .$Flowchart.drawio.bkp
 .$Flowchart.drawio.dtmp
 Flowchart.drawio
