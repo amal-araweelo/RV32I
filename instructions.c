@@ -265,7 +265,11 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LW: Load Word
 	case 0x02:
+<<<<<<< HEAD
 		uint8_t to_load8_0 = *load_at;		//place bytes in vars
+=======
+		uint8_t to_load8_0 = *load_at;
+>>>>>>> cffab362e3ef155ba65ea4589557ae5b08d58509
 		uint8_t to_load8_1 = *load_at1;
 		uint8_t to_load8_2 = *load_at2;
 		uint8_t to_load8_3 = *load_at3;
@@ -283,9 +287,15 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	case 0x05:
 		uint8_t to_load8_1lhu = *load_at;			// Load bytes into variables
 		uint8_t to_load8_2lhu = *load_at1;
+<<<<<<< HEAD
 		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));	//Place bytes in halfword by or'ing together
 		uint32_t to_load32lhu = to_load16lhu; 	// load into word for placing in reg
 		reg[rd] = to_load32lhu;		//place in reg
+=======
+		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));
+		uint32_t to_load32lhu = to_load16lhu; // load into 32bit val
+		reg[rd] = to_load32lhu;
+>>>>>>> cffab362e3ef155ba65ea4589557ae5b08d58509
 		break;
 
 	// Error handling
