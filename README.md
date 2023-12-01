@@ -1,7 +1,7 @@
 # RISC-V 32-bit integer instruction set simulator
 
 
-## README - file structure and running the program
+## File structure and running the program
 
 File structure and running the program
 The code for this project is split into multiple source files and headers.
