@@ -253,7 +253,7 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LH: Load Half
 	case 0x01:
-		uint8_t to_load8_lo = *load_at; //place bytes in vars
+		uint8_t to_load8_lo = *load_at; // place bytes in vars
 		uint8_t to_load8_hi = *load_at1;
 		uint16_t to_load16 = ((to_load8_hi << 8) | (to_load8_lo));
 		uint32_t to_load32lh = to_load16; // load unsigned
