@@ -265,14 +265,13 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LW: Load Word
 	case 0x02:
-			// printf("hello from lw \n");
-		uint8_t to_load8_0 = *load_at;
+		uint8_t to_load8_0 = *load_at;		//place bytes in vars
 		uint8_t to_load8_1 = *load_at1;
 		uint8_t to_load8_2 = *load_at2;
 		uint8_t to_load8_3 = *load_at3;
-
-		uint32_t to_load32lw = ((to_load8_3 << 24) | (to_load8_2 << 16) | (to_load8_1 << 8) | (to_load8_0));
-		reg[rd] = to_load32lw;
+		// Place bytes in word by or'ing together
+		uint32_t to_load32lw = ((to_load8_3 << 24) | (to_load8_2 << 16) | (to_load8_1 << 8) | (to_load8_0));	
+		reg[rd] = to_load32lw;	//Place word in reg
 		break;
 
 	// LBU: Load Byte Unsigned
@@ -282,12 +281,11 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LHU: Load Half Unsigned
 	case 0x05:
-
-		uint8_t to_load8_1lhu = *load_at;
+		uint8_t to_load8_1lhu = *load_at;			// Load bytes into variables
 		uint8_t to_load8_2lhu = *load_at1;
-		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));
-		uint32_t to_load32lhu = to_load16lhu; 	// load into 32bit val
-		reg[rd] = to_load32lhu;
+		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));	//Place bytes in halfword by or'ing together
+		uint32_t to_load32lhu = to_load16lhu; 	// load into word for placing in reg
+		reg[rd] = to_load32lhu;		//place in reg
 		break;
 
 	// Error handling
