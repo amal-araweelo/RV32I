@@ -253,21 +253,26 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 
 	// LH: Load Half
 	case 0x01:
-		int32_t to_load_lh = ((*load_at1 << 8) // load bytes into signed var
-				      | (*load_at));   //	by shifting upper 8 bits and or'ing together
-		if ((to_load_lh >> 15) == 1) {	       // 	sign extend if needed
-			to_load_lh = to_load_lh | 0xFFFF0000;
+		uint8_t to_load8_lo = *load_at;
+		uint8_t to_load8_hi = *load_at1;
+		uint16_t to_load16 = ((to_load8_hi << 8) | (to_load8_lo));
+		uint32_t to_load32lh = to_load16; // load unsigned
+		if ((to_load16 >> 15) == 1) { // sign extend if needed
+			to_load32lh = to_load32lh | 0xFFFF0000;
 		}
-		reg[rd] = to_load_lh; // place value in register
+		reg[rd] = to_load32lh;
 		break;
 
 	// LW: Load Word
 	case 0x02:
-		uint32_t to_load32lw = ((*load_at3 << 24)   // load bytes into var
-					| (*load_at2 << 16) // 	by shifting where needed
-					| (*load_at1 << 8)  //	and or'ing together
-					| (*load_at));
-		reg[rd] = to_load32lw; // place value in register
+			// printf("hello from lw \n");
+		uint8_t to_load8_0 = *load_at;
+		uint8_t to_load8_1 = *load_at1;
+		uint8_t to_load8_2 = *load_at2;
+		uint8_t to_load8_3 = *load_at3;
+
+		uint32_t to_load32lw = ((to_load8_3 << 24) | (to_load8_2 << 16) | (to_load8_1 << 8) | (to_load8_0));
+		reg[rd] = to_load32lw;
 		break;
 
 	// LBU: Load Byte Unsigned
@@ -278,9 +283,11 @@ void ITypeLoadSwitch(uint32_t funct3, uint32_t funct7, uint32_t rd, uint32_t rs1
 	// LHU: Load Half Unsigned
 	case 0x05:
 
-		uint32_t to_load_lhu = ((*load_at1 << 8) // load bytes into unsigned var
-					| (*load_at));
-		reg[rd] = to_load_lhu; // load value into register
+		uint8_t to_load8_1lhu = *load_at;
+		uint8_t to_load8_2lhu = *load_at1;
+		uint16_t to_load16lhu = ((to_load8_2lhu << 8) | (to_load8_1lhu));
+		uint32_t to_load32lhu = to_load16lhu; 	// load into 32bit val
+		reg[rd] = to_load32lhu;
 		break;
 
 	// Error handling
