@@ -18,6 +18,6 @@ make
 ```
 
 To run the program navigate to the ```/build``` folder in the ubuntu terminal, and run:
-./isasim "[arg]"
-where 'arg' is the argument consisting of the path for the binary code to be run on the simulator, eg '../task4/t1.bin'
+```./isasim "[arg]"```
+where 'arg' is the argument consisting of the path for the binary code to be run on the simulator, eg ```../task4/t1.bin```
 
