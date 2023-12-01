@@ -15,6 +15,7 @@ To build the program, navigate to the /build folder in the ubuntu terminal, and 
 ```
 cmake ..
 make
+
 ´´´
 
 To run the program navigate to the /build folder in the ubuntu terminal, and run:
