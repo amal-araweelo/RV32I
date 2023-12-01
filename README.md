@@ -1,7 +1,6 @@
 # README - file structure and running the program
 
 File structure and running the program
-This information is also available in te README file
 The code for this project is split into multiple files and headers.
 
 	opcodes.h contains definitions for opcodes for different instruction types
