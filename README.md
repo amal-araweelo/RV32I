@@ -12,7 +12,7 @@ The code for this project is split into multiple files and headers.
     isasim.c is the main file, containing the main features of the simulator.
 
 To build the program, navigate to the /build folder in the ubuntu terminal, and run:
-```
+```bash
 cmake ..
 make
 
