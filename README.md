@@ -3,7 +3,6 @@
 
 ## File structure and running the program
 
-File structure and running the program
 The code for this project is split into multiple source files and headers.
 
 * <b> opcodes.h </b> contains definitions for opcodes for different instruction types
