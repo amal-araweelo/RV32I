@@ -4,7 +4,7 @@
 ## README - file structure and running the program
 
 File structure and running the program
-The code for this project is split into multiple files and headers.
+The code for this project is split into multiple source files and headers.
 
     opcodes.h contains definitions for opcodes for different instruction types
     globals.c and globals.h contain definitions of global variables
