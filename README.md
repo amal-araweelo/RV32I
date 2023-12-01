@@ -1,15 +1,23 @@
-# Final Assignment CPP Template  
-This template is a simple structure to help you get started with the final project if ever you want to do it in `C++`. The instructions for the assignment remain the same.  
+# RISC-V 32-bit integer instruction set simulator
 
-## Structure  
-Please follow the documentation and structure example which you can find in the `src/` folder. This means that your main code should go into `IsaSim.cpp` and the other classes or utility code you might write should go into `src` with extensions in `.cpp` for your source code and `.h` for your headers.  
-  
-## Compiling & Executing  
-With the current template, we have suplied a cmake configuration, so to use it:  
+
+## README - file structure and running the program
+
+File structure and running the program
+The code for this project is split into multiple files and headers.
+
+    opcodes.h contains definitions for opcodes for different instruction types
+    globals.c and globals.h contain definitions of global variables
+    instructions.c and instructions.h contain switches for the different instruction types, as well as the function to dump the register contents.
+    isasim.c is the main file, containing the main features of the simulator.
+
+To build the program, navigate to the /build folder in the ubuntu terminal, and run:
 ```
-mkdir build
-cd build
 cmake ..
 make
-./isasim
-```  
+```
+
+To run the program navigate to the /build folder in the ubuntu terminal, and run:
+./isasim "[arg]"
+where 'arg' is the argument consisting of the path for the binary code to be run on the simulator, eg '../task4/t1.bin'
+
