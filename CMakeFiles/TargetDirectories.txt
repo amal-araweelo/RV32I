@@ -1,3 +1,0 @@
-/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles/isasim.dir
-/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles/edit_cache.dir
-/mnt/c/Users/amaln/OneDrive - Danmarks Tekniske Universitet/3. Semester/Computerarkitektur/Final/CMakeFiles/rebuild_cache.dir
